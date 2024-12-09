@@ -2,9 +2,7 @@ const Product = require('../models/products.model');
 
 class ProductService {
 
-    constructor(){
-        this.products= []
-    }
+    constructor(){}
 
     async create(data){
         try {
@@ -18,7 +16,7 @@ class ProductService {
                 expirationDate : data.expirationDate,
                 state : data.state
             });
-            return newCategory
+            return newCategory;
         } catch (error) {
             console.error('Error al crear el producto:', error.message);
             throw error;
@@ -43,7 +41,6 @@ class ProductService {
             }
             return product;
         } catch (error) {
-            console.error('Error al buscar el producto:', error.message);
             console.error('Error al buscar el producto:', error.message);
             throw error;
         }
