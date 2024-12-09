@@ -1,6 +1,10 @@
-const Employee = require('./../models/employee.model');
+const Employee = require('./../models/employees.model');
 
 class EmployeeService {
+    constructor(){
+        
+    }
+
     async create(data){
         try {
             if (!data.idUser) {

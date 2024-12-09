@@ -1,6 +1,11 @@
 const User = require('./../models/users.model');
 
 class UserService {
+
+    constructor(){
+        
+    }
+    
     async create(data){
         try {
             if (!data.idRole) {

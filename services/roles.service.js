@@ -1,8 +1,11 @@
 const Role  = require('./../models/roles.model');
 
 class RoleService{
+    constructor(){   
+    }
+
     async create(data){
-        try {
+        try { 
             const newRole = await Role.create({
                 name : data.name,
                 description : data.description,

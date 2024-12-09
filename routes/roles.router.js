@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const RoleService = require('./../services/roles.service');
+const RoleService = require('../services/roles.service');
 const service = new RoleService();
 
 router.get('/', async (req, res, next) => {

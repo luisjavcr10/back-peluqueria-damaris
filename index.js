@@ -1,9 +1,11 @@
+require('./models'); // soluciono el problema con las relaciones ventas y detalles, carga los modelos e index.js antes de todos los modelos.
 const express = require('express');
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
 
 
 const routerApi = require('./routes');
+
 
 // Configurar dotenv para cargar las variables de entorno
 dotenv.config();
