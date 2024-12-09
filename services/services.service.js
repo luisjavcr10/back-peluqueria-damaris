@@ -61,7 +61,7 @@ class ServiceService {
             if(!service){
                 throw new Error(`El servicio con id: ${id} no fue encontrado.`)
             }
-            await Service.destroy(id)
+            await service.destroy(id);
             return {
                 message : `Servicio con el id: ${id} eliminado correctamente`
             }

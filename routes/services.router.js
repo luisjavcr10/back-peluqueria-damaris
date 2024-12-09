@@ -28,7 +28,7 @@ router.get('/:id', async(req,res) =>{
 router.post('/', async(req,res) =>{
     const body = req.body;
     try {
-        const newService = service.create(body)
+        const newService =  await service.create(body)
         res.json(newService);
     } catch (error) {
         res.status(500).json({message: error.message});
@@ -39,7 +39,7 @@ router.put('/:id', async(req,res) =>{
     const {id} = req.params;
     const changes = req.body;
     try {
-        const updatedService = service.update(id,changes);
+        const updatedService = await service.update(id,changes);
         res.json(updatedService);
     } catch (error) {
         res.status(404).json({
@@ -51,7 +51,7 @@ router.put('/:id', async(req,res) =>{
 router.delete('/:id', async(req,res) =>{
     const {id} = req.params;
     try {
-        const result = service.delete(id);
+        const result = await service.delete(id);
         res.json(result);
     } catch (error) {
         res.status(404).json({

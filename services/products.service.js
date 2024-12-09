@@ -66,7 +66,7 @@ class ProductService {
             if(!product){
                 throw new Error(`El producto con id: ${id} no se encontró`)
             }
-            await Product.destroy(id);
+            await product.destroy(id);
             return {
                 message : `Producto con el id: ${id} eliminado correctamente`
             }
