@@ -7,50 +7,60 @@ const service = new EmployeeService();
 router.get('/', async (req, res, next) => {
     try {
         const employees = await service.find();
-        res.json(employees);
+        res.status(200).json(employees);
     } catch (error) {
-        next(error);
+        const httpError = new Error('Error al obtener los empleados');
+        httpError.status = 500;
+        next(httpError);
     }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
     const { id } = req.params;
     try {
         const employee = await service.findById(id);
-        res.json(employee);
+        res.status(200).json(employee);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        const httpError = new Error('Error al encontrar el empleado');
+        httpError.status = 404;
+        next(httpError);
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
     const body = req.body;
     try {
         const newEmployee = await service.create(body);
-        res.json(newEmployee);
+        res.status(201).json(newEmployee);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        const httpError = new Error('Error al crear el empleado');
+        httpError.status = 400;
+        next(httpError);
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', async (req, res, next) => {
     const { id } = req.params;
     const changes = req.body;
     try {
         const updatedEmployee = await service.update(id, changes);
-        res.json(updatedEmployee);
+        res.status(200).json(updatedEmployee);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        const httpError = new Error('Error al actualizar el empleado');
+        httpError.status = 404;
+        next(httpError);
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res, next) => {
     const { id } = req.params;
     try {
         const result = await service.delete(id);
-        res.json(result);
+        res.status(204).json(result);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        const httpError = new Error('Error al eliminar el empleado');
+        httpError.status = 404;
+        next(httpError);
     }
 });
 

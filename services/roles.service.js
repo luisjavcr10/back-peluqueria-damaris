@@ -1,7 +1,16 @@
 const Role  = require('./../models/roles.model');
+const boom = require('@hapi/boom');
 
 class RoleService{
     constructor(){   
+    }
+
+    _handleError(error, message) {
+        if (!boom.isBoom(error)) {
+            console.error('Error inesperado:', error.message);
+            throw boom.internal(message, { originalError: error.message });
+        }
+        throw error; 
     }
 
     async create(data){
@@ -12,8 +21,7 @@ class RoleService{
             })
             return newRole;
         } catch (error) {
-            console.error('Error al crear el rol:', error.message);
-            throw error;
+            this._handleError(error, 'Error al crear el rol');
         }
     };
 
@@ -22,8 +30,7 @@ class RoleService{
             const roles = await Role.findAll();
             return roles;
         } catch (error) {
-            console.error('Error al obtener roles:', error);
-            throw new Error('No se pudieron obtener los roles');
+            this._handleError(error, 'Error al obtener roles');
         }
     };
 
@@ -35,8 +42,7 @@ class RoleService{
             }
             return role;
         } catch (error) {
-            console.error('Error al buscar el rol:', error.message);
-            throw error;
+            this._handleError(error, 'Error al buscar el rol');
         }
     };
 
@@ -49,8 +55,7 @@ class RoleService{
             const updatedRole = await role.update(changes);
             return updatedRole;
         } catch (error) {
-            console.error('Error al actualizar el rol:', error.message);
-            throw error;
+            this._handleError(error, 'Error al actualizar el rol');
         }
     };
 
@@ -65,8 +70,7 @@ class RoleService{
                 message : `Rol con el id: ${id} eliminado correctamente`
             }
         } catch (error) {
-            console.log('Error al eliminar el rol', error.message);
-            throw error;
+            this._handleError(error, 'Error al eliminar el rol');
         }
     };
             

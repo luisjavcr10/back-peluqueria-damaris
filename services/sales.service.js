@@ -2,10 +2,20 @@ require('./../models');// soluciono el problema con las relaciones ventas y deta
 const Sale = require('./../models/sales.model');
 const SalesDetails = require('./../models/salesDetails.model');
 const sequelize = require('./../config/db');
+const boom = require('@hapi/boom');
+//const e = require('express');
 
 
 class SalesService {
     constructor(){}
+
+    _handleError(error, message) {
+        if (!boom.isBoom(error)) {
+            console.error('Error inesperado:', error.message);
+            throw boom.internal(message, { originalError: error.message });
+        }
+        throw error; 
+    }
 
     async find(){
         try {
@@ -17,9 +27,9 @@ class SalesService {
             });
             return sales;
         } catch (error) {
-            throw error;
+            this._handleError(error,'No se encontraron las ventas')
         }
-    }
+    };
 
     async createSalesWithDetails (saleData, saleDetailsData){
         const t = await sequelize.transaction();
@@ -41,9 +51,13 @@ class SalesService {
             return newSale;
         } catch (error) {
             await t.rollback();
-            throw error;
+            this._handleError(error,'Falló el registro')
         }
-    }
+    };
+
+    async update(id, changes){
+        
+    };
 }
 
 module.exports=SalesService;

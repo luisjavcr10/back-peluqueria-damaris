@@ -1,9 +1,17 @@
 const User = require('./../models/users.model');
+const boom = require('@hapi/boom');
 
 class UserService {
 
-    constructor(){
-        
+    constructor(){   
+    }
+
+    _handleError(error, message) {
+        if (!boom.isBoom(error)) {
+            console.error('Error inesperado:', error.message);
+            throw boom.internal(message, { originalError: error.message });
+        }
+        throw error; 
     }
     
     async create(data){
@@ -15,7 +23,7 @@ class UserService {
             await user.save();
             return user;
         } catch (error) {
-            throw error; 
+            this._handleError(error,'No se pudo crear el servicio');
         }
     };
 
@@ -23,15 +31,19 @@ class UserService {
         try {
             return await User.find();
         } catch (error) {
-            throw error; 
+            tthis._handleError(error,'No se pudo encontrar los servicios');
         }
     };
 
     async findById(id){
         try {
-            return await User.findById(id);
+            const user = User.findById(id);
+            if(!user){
+                throw boom,boom.notFound(`User con Id: ${id} no encontrado`);
+            }
+            return user;
         } catch (error) {
-            throw error;
+            this._handleError(error,'No se pudo encontrar el servicio');
         }
     };
 
@@ -39,7 +51,7 @@ class UserService {
         try {
             return await User.findByIdAndUpdate(id, changes, { new: true });
         } catch (error) {
-            throw error; 
+            this._handleError(error,'No se pudo actualizar el servicio');
         }
     };
 
@@ -47,7 +59,7 @@ class UserService {
         try {
             return await User.findByIdAndDelete(id);
         } catch (error) {
-            throw error; 
+            this._handleError(error,'No se pudo eliminar el servicio');
         }
     };
 }

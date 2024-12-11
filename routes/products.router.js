@@ -7,9 +7,11 @@ const service = new ProductService();
 router.get('/', async (req, res, next) => {
     try {
         const categories = await service.find();
-        res.json(categories);
+        res.status(200).json(categories);
     } catch (error) {
-        next(error);
+        const httpError = new Error('Error al obtener los productos');
+        httpError.status = 500;
+        next(httpError);
     }
 });
 
@@ -17,11 +19,11 @@ router.get('/:id', async(req,res)=>{
     const {id} = req.params;
     try {
         const product = await service.findById(id);
-        res.json(product);
+        res.status(200).json(product);
     } catch (error) {
-        res.status(404).json({
-            message : error.message
-        })
+        const httpError = new Error('Error al encontrar el producto');
+        httpError.status = 404;
+        next(httpError);
     }
 });
 
@@ -31,7 +33,9 @@ router.post('/', async(req,res)=>{
         const newProduct = await service.create(body);
         res.json(newProduct);
     } catch (error) {
-        res.status(500).json({message: error.message});
+        const httpError = new Error('Error al crear el producto');
+        httpError.status = 400;
+        next(httpError);
     }
 });
 
@@ -42,9 +46,9 @@ router.put('/:id', async(req,res)=>{
         const updatedProduct = await service.update(id,changes);
         res.json(updatedProduct);
     } catch (error) {
-        res.status(404).json({
-            message : error.message
-        });
+        const httpError = new Error('Error al actualizar el producto');
+        httpError.status = 404;
+        next(httpError);
     }
 });
 
@@ -54,9 +58,9 @@ router.delete('/:id', async(req,res)=>{
         const result = await service.delete(id);
         res.json(result);
     } catch (error) {
-        res.status(404).json({
-            message : error.message
-        });
+        const httpError = new Error('Error al eliminar el producto');
+        httpError.status = 404;
+        next(httpError);
     }
 });
 

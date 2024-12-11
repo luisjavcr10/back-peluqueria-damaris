@@ -1,8 +1,16 @@
 const Employee = require('./../models/employees.model');
+const boom = require('@hapi/boom');
 
 class EmployeeService {
     constructor(){
-        
+    }
+
+    _handleError(error, message) {
+        if (!boom.isBoom(error)) {
+            console.error('Error inesperado:', error.message);
+            throw boom.internal(message, { originalError: error.message });
+        }
+        throw error; 
     }
 
     async create(data){
@@ -14,8 +22,7 @@ class EmployeeService {
             await employee.save();
             return employee;
         } catch (error) {
-            console.error('Error al crear el empleado:', error.message);
-            throw error;
+            this._handleError(error,'Error al crear el empleado:' );
         }
     };
 
@@ -23,9 +30,7 @@ class EmployeeService {
         try {
             return await Employee.find();
         } catch (error) {
-            console.error('Error al obtener empleados:', error);
-            throw new Error('No se pudieron obtener los empleados');
-
+            this._handleError(error, 'Error al obtener empleados');
         }
     };
 
@@ -33,8 +38,7 @@ class EmployeeService {
         try {
             return await Employee.findById(id);
         } catch (error) {
-            console.error('Error al buscar el empleado:', error.message);
-            throw error;
+            this._handleError(error, 'Error al buscar el empleado');
         }
     };
 
@@ -42,8 +46,7 @@ class EmployeeService {
         try {
             return await Employee.findByIdAndUpdate(id, changes, { new: true });
         } catch (error) {
-            console.error('Error al actualizar el empleado:', error.message);
-            throw error;
+            this._handleError(error,'Error al actualizar el empleado', );
         }
     };
 
@@ -51,8 +54,7 @@ class EmployeeService {
         try {
             return await Employee.findByIdAndDelete(id);
         } catch (error) {
-            console.log('Error al eliminar el empleado', error.message);
-            throw error; 
+            this._handleError(error,'Error al eliminar el empleado' );
         }
     };
 }

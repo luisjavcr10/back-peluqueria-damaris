@@ -1,8 +1,17 @@
 const Product = require('./../models/products.model');
+const boom = require('@hapi/boom');
 
 class ProductService {
 
     constructor(){}
+
+    _handleError(error, message) {
+        if (!boom.isBoom(error)) {
+            console.error('Error inesperado:', error.message);
+            throw boom.internal(message, { originalError: error.message });
+        }
+        throw error; 
+    }
 
     async create(data){
         try {
@@ -18,8 +27,7 @@ class ProductService {
             });
             return newCategory;
         } catch (error) {
-            console.error('Error al crear el producto:', error.message);
-            throw error;
+            this._handleError(error, 'Error al crear el producto');
         } 
     }
 
@@ -28,8 +36,7 @@ class ProductService {
             const products =  await Product.findAll();
             return products;
         } catch (error) {
-            console.error('Error al obtener productos:', error);
-            throw new Error('No se pudieron obtener los productos');
+            this._handleError(error, 'Error al obtener productos');
         }
     }
 
@@ -37,12 +44,11 @@ class ProductService {
         try {
             const product = Product.findByPk(id);
             if(!product){
-                throw new Error(`El producto con id: ${id} no se encontró`)
+                throw boom.notFound(`El producto con id: ${id} no se encontró`);
             }
             return product;
         } catch (error) {
-            console.error('Error al buscar el producto:', error.message);
-            throw error;
+            this._handleError(error, 'Error al buscar el producto');
         }
     }
 
@@ -50,13 +56,12 @@ class ProductService {
         try {
             const product = await Product.findByPk(id);
             if(!product){
-                throw new Error(`El producto con id: ${id} no se encontró`)
+                throw boom.notFound(`El producto con id: ${id} no se encontró`);
             }
             const updatedProduct = await product.update(changes);
             return updatedProduct;
         } catch (error) {
-            console.error('Error al actualizar el producto:', error.message);
-            throw error;
+            this._handleError(error, 'Error al actualizar el producto');
         }
     }
 
@@ -64,15 +69,14 @@ class ProductService {
         try {
             const product = await Product.findByPk(id);
             if(!product){
-                throw new Error(`El producto con id: ${id} no se encontró`)
+                throw boom.notFound(`El producto con id: ${id} no se encontró`);
             }
             await product.destroy(id);
             return {
                 message : `Producto con el id: ${id} eliminado correctamente`
             }
         } catch (error) {
-            console.log('Error al eliminar el producto', error.message);
-            throw error;
+            this._handleError(error, 'Error al eliminar el producto');
         }
     }
 

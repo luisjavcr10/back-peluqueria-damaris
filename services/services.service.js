@@ -1,7 +1,16 @@
 const Service = require('./../models/services.model');
+const boom = require('@hapi/boom');
 
 class ServiceService {
     constructor(){}
+
+    _handleError(error, message) {
+        if (!boom.isBoom(error)) {
+            console.error('Error inesperado:', error.message);
+            throw boom.internal(message, { originalError: error.message });
+        }
+        throw error; 
+    }
 
     async create (data){
         try {
@@ -13,8 +22,7 @@ class ServiceService {
             });
             return newService;
         } catch (error) {
-            console.error('Error al crear el servicio:', error.message);
-            throw error;
+            this._handleError(error,'Error al crear el servicio');
         }
     };
 
@@ -23,8 +31,7 @@ class ServiceService {
             const services = await Service.findAll();
             return services;
         } catch (error) {
-            console.error('Error al obtener servicios:', error);
-            throw new Error('No se pudieron obtener los servicios');
+            this._handleError(error,'Error al obtener servicios');
         }
     };
 
@@ -32,12 +39,11 @@ class ServiceService {
         try {
             const service = Service.findByPk(id);
             if(!service){
-                throw new Error(`El servicio con id: ${id} no fue encontrado.`)
+                throw boom.notFound(`El servicio con id: ${id} no fue encontrado.`);
             }
             return service;
         } catch (error) {
-            console.error('Error al buscar el servicio:', error.message);
-            throw error;
+            this._handleError(error,'Error al buscar el servicio');
         }
     };
 
@@ -45,13 +51,12 @@ class ServiceService {
         try {
             const service = await Service.findByPk(id);
             if(!service){
-                throw new Error(`El servicio con id: ${id} no fue encontrado.`)
+                throw boom.notFound(`El servicio con id: ${id} no fue encontrado.`);
             }
             const updatedService = await Service.update(changes);
             return updatedService;
         } catch (error) {
-            console.error('Error al actualizar el servicio:', error.message);
-            throw error;
+            this._handleError(error,'Error al actualizar el servicio');
         }
     };
 
@@ -59,15 +64,14 @@ class ServiceService {
         try {
             const service = await Service.findByPk(id);
             if(!service){
-                throw new Error(`El servicio con id: ${id} no fue encontrado.`)
+                throw boom.notFound(`El servicio con id: ${id} no fue encontrado.`);
             }
             await service.destroy(id);
             return {
                 message : `Servicio con el id: ${id} eliminado correctamente`
             }
         } catch (error) {
-            console.log('Error al eliminar el servicio', error.message);
-            throw error;
+            this._handleError(error,'Error al eliminar el servicio');
         }
     };
 

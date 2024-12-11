@@ -7,9 +7,11 @@ const service = new ServiceService();
 router.get('/', async(req,res,next) =>{
     try {
         const services = await service.find();
-        res.json(services);
+        res.status(200).json(services);
     } catch (error) {
-        next(error);
+        const httpError = new Error('Error al obtener los servicios');
+        httpError.status = 500;
+        next(httpError);
     }
 });
 
@@ -17,11 +19,11 @@ router.get('/:id', async(req,res) =>{
     const {id} = req.params;
     try {
         const aService = await service.findById(id);
-        res.json(aService);
+        res.status(200).json(aService);
     } catch (error) {
-        res.status(404).json({
-            message : error.message
-        })
+        const httpError = new Error('Error al encontrar el servicio');
+        httpError.status = 404;
+        next(httpError);
     }
 });
 
@@ -31,7 +33,9 @@ router.post('/', async(req,res) =>{
         const newService =  await service.create(body)
         res.json(newService);
     } catch (error) {
-        res.status(500).json({message: error.message});
+        const httpError = new Error('Error al crear el servicio');
+        httpError.status = 400;
+        next(httpError);
     }
 });
 
@@ -42,9 +46,9 @@ router.put('/:id', async(req,res) =>{
         const updatedService = await service.update(id,changes);
         res.json(updatedService);
     } catch (error) {
-        res.status(404).json({
-            message : error.message
-        });
+        const httpError = new Error('Error al actualizar el servicio');
+        httpError.status = 404;
+        next(httpError);
     }
 });
 
@@ -54,9 +58,9 @@ router.delete('/:id', async(req,res) =>{
         const result = await service.delete(id);
         res.json(result);
     } catch (error) {
-        res.status(404).json({
-            message : error.message
-        });
+        const httpError = new Error('Error al eliminar el servicio');
+        httpError.status = 404;
+        next(httpError);
     }
 });
 

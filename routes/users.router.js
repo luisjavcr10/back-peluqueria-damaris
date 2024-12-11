@@ -7,9 +7,11 @@ const service = new UserService();
 router.get('/', async (req, res, next) => {
     try {
         const users = await service.find();
-        res.json(users);
+        res.status(200).json(users);
     } catch (error) {
-        next(error);
+        const httpError = new Error('Error al obtener los usuarios');
+        httpError.status = 500;
+        next(httpError);
     }
 });
 
@@ -17,9 +19,11 @@ router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const user = await service.findById(id);
-        res.json(user);
+        res.status(200).json(user);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        const httpError = new Error('Error al encontrar el usuario');
+        httpError.status = 404;
+        next(httpError);
     }
 });
 
@@ -29,7 +33,9 @@ router.post('/', async (req, res) => {
         const newUser = await service.create(body);
         res.json(newUser);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        const httpError = new Error('Error al crear el usuario');
+        httpError.status = 400;
+        next(httpError);
     }
 });
 
@@ -40,7 +46,9 @@ router.put('/:id', async (req, res) => {
         const updatedUser = await service.update(id, changes);
         res.json(updatedUser);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        const httpError = new Error('Error al actualizar el usuario');
+        httpError.status = 404;
+        next(httpError);
     }
 });
 
@@ -50,7 +58,9 @@ router.delete('/:id', async (req, res) => {
         const result = await service.delete(id);
         res.json(result);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        const httpError = new Error('Error al eliminar el usuario');
+        httpError.status = 404;
+        next(httpError);
     }
 });
 

@@ -7,9 +7,11 @@ const service = new RoleService();
 router.get('/', async (req, res, next) => {
     try {
         const roles = await service.find();
-        res.json(roles);
+        res.status(200).json(roles);
     } catch (error) {
-        next(error);
+        const httpError = new Error('Error al obtener los roles');
+        httpError.status = 500;
+        next(httpError);
     }
 });
 
@@ -17,9 +19,11 @@ router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const role = await service.findById(id);
-        res.json(role);
+        res.status(200).json(role);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        const httpError = new Error('Error al encontrar el rol');
+        httpError.status = 404;
+        next(httpError);
     }
 });
 
@@ -29,7 +33,9 @@ router.post('/', async (req, res) => {
         const newRole = await service.create(body);
         res.json(newRole);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        const httpError = new Error('Error al crear el rol');
+        httpError.status = 400;
+        next(httpError);
     }
 });
 
@@ -40,7 +46,9 @@ router.put('/:id', async (req, res) => {
         const updatedRole = await service.update(id, changes);
         res.json(updatedRole);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        const httpError = new Error('Error al actualizar el rol');
+        httpError.status = 404;
+        next(httpError);
     }
 });
 
@@ -50,7 +58,9 @@ router.delete('/:id', async (req, res) => {
         const result = await service.delete(id);
         res.json(result);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        const httpError = new Error('Error al eliminar el rol');
+        httpError.status = 404;
+        next(httpError);
     }
 });
 

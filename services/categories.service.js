@@ -1,80 +1,81 @@
 const Category = require('./../models/categories.model');
+const boom = require('@hapi/boom');
 
 class CategoriesService {
 
     constructor(){
-        this.categories =[];
+        this.categories = [];
     }
 
-    async create (data){
+    // Método privado para manejar errores
+    _handleError(error, message) {
+        if (!boom.isBoom(error)) {
+            console.error('Error inesperado:', error.message);
+            throw boom.internal(message, { originalError: error.message });
+        }
+        throw error; 
+    }
+
+    async create(data) {
         try {
             const newCategory = await Category.create({
-                name : data.name,
+                name: data.name,
                 description: data.description,
-            })
+            });
             return newCategory;
         } catch (error) {
-            console.error('Error al crear la categoría:', error.message);
-            throw error;
+            this._handleError(error, 'Error al crear la categoría');
         }
     }
 
-    async find(){
+    async find() {
         try {
             const categories = await Category.findAll();
             return categories;
         } catch (error) {
-            console.error('Error al obtener categorías:', error);
-            throw new Error('No se pudieron obtener las categorías');
+            this._handleError(error, 'Error al obtener las categorías');
         }
-        
     }
 
-    async findById(id){
+    async findById(id) {
         try {
             const category = await Category.findByPk(id);
-            if(!category){
-                throw new Error (`Categoría con ID ${id} no encontrada`);
+            if (!category) {
+                throw boom.notFound('Categoría no encontrada');
             }
             return category;
         } catch (error) {
-            console.error('Error al buscar la categoría:', error.message);
-            throw error;
+            this._handleError(error, 'Error al buscar la categoría');
         }
     }
 
-    async update(id,changes){
+    async update(id, changes) {
         try {
             const category = await Category.findByPk(id);
-            if(!category){
-                throw new Error (`Categoría con ID ${id} no encontrada`);
+            if (!category) {
+                throw boom.notFound('Categoría no encontrada');
             }
             const updatedCategory = await category.update(changes);
             return updatedCategory;
         } catch (error) {
-            console.error('Error al actualizar la categoría:', error.message);
-            throw error;
+            this._handleError(error, 'Error al actualizar la categoría');
         }
-
     }
 
-    async delete(id){
+    async delete(id) {
         try {
             const category = await Category.findByPk(id);
-            if(!category){
-                throw new Error (`Categoría con ID ${id} no encontrada`);
+            if (!category) {
+                throw boom.notFound('Categoría no encontrada');
             }
             await category.destroy();
             return {
-                message : `Categoria con el id: ${id} eliminada correctamente`
-            }
+                message: `Categoría con el id: ${id} eliminada correctamente`
+            };
         } catch (error) {
-            console.error('Error al eliminar la categoría:', error.message);
-            throw error;
+            this._handleError(error, 'Error al eliminar la categoría');
         }
-
     }
-
 }
 
 module.exports = CategoriesService;

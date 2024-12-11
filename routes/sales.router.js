@@ -1,26 +1,7 @@
 const express = require('express');
 const router = express.Router();
-
 const SalesService = require('../services/sales.service');
 const service = new SalesService();
-
-router.post('/', async(req,res)=>{
-    const {saleData, saleDetailsData} = req.body;
-    
-    try {
-        const newSale = await service.createSalesWithDetails(saleData,saleDetailsData);
-        res.status(201).json({
-            message: 'Venta creada exitosamente',
-            sale: newSale
-        })
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: 'Error al crear la venta',
-            error: error.message
-        });
-    }
-});
 
 router.get('/', async(req,res)=>{
     try {
@@ -38,5 +19,20 @@ router.get('/', async(req,res)=>{
     }
     
 })
+
+router.post('/', async(req,res)=>{
+    try {
+        const {saleData, saleDetailsData} = req.body;
+        const newSale = await service.createSalesWithDetails(saleData,saleDetailsData);
+        res.status(201).json({
+            message: 'Venta registrada exitosamente',
+            sale: newSale
+        })
+    } catch (error) {
+        const httpError = new Error('Error al registrar la venta');
+        httpError.status = 400;
+        next(httpError);
+    }
+});
 
 module.exports = router;

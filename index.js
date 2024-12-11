@@ -2,15 +2,16 @@ require('./models'); // soluciono el problema con las relaciones ventas y detall
 const express = require('express');
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
-
+const swaggerUI = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 
 const routerApi = require('./routes');
+const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
 
-
-// Configurar dotenv para cargar las variables de entorno
 dotenv.config();
 
 const app = express();
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 // Conexion a la base de datos
 const PORT = process.env.PORT || 3000;
@@ -29,7 +30,6 @@ db.connect((err) => {
     console.error('Error al conectar a la base de datos:', err);
     process.exit(1); // Salir si hay un error
   }
-  console.log('Conexión exitosa a la base de datos MySQL');
 });
 
 app.listen(PORT, () => {
@@ -38,5 +38,10 @@ app.listen(PORT, () => {
 
 //Llamamos las rutas
 routerApi(app);
+
+app.use(logErrors);
+app.use(boomErrorHandler);
+app.use(errorHandler);
+
 
 
