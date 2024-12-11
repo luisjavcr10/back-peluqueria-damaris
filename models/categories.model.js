@@ -26,4 +26,4 @@ Category.init({
     timestamps: false,
 });
 
-module.exports = Category;
+module.exports = Category; 
