@@ -5,9 +5,10 @@ const Employee = require('./employees.model');
 const Role = require('./roles.model');
 const Sales = require('./sales.model');
 const SalesDetails = require('./salesDetails.model'); 
-
+const Service = require('./../models/services.model');
 
 // Definir las asociaciones
+// Relación entre Category y Product
 Category.hasMany(Product, {
     foreignKey: 'idCategory',
     sourceKey: 'idCategory',
@@ -17,7 +18,7 @@ Category.hasMany(Product, {
 Product.belongsTo(Category, {
     foreignKey: 'idCategory',
     targetKey: 'idCategory',
-    as: 'categories'
+    as: 'category'
 });
 
 // Relación entre Role y User
@@ -46,29 +47,29 @@ Employee.belongsTo(User, {
     as: 'user'
 });
 
-//Relacion entre Sales y User
-Sales.belongsTo(User,{
+// Relación entre Sales y User
+Sales.belongsTo(User, {
     foreignKey: 'idUser',
     targetKey: 'idUser',
     as: 'user'
 });
 
-//Relacion entre sales y salesDetails
-Sales.hasMany(SalesDetails,{
+// Relación entre Sales y SalesDetails
+Sales.hasMany(SalesDetails, {
     foreignKey: 'idSales',
     sourceKey: 'idSales',
     as: 'details',
-    //onDelete: 'CASCADE'
+    onDelete: 'CASCADE'
 });
 
 SalesDetails.belongsTo(Sales, {
     foreignKey: 'idSales',
     targetKey: 'idSales',
     as: 'sale',
-    //onDelete: 'CASCADE'
+    onDelete: 'CASCADE'
 });
 
-//Relacion entre salesDetails y products
+// Relación entre SalesDetails y Product
 SalesDetails.belongsTo(Product, {
     foreignKey: 'idProduct',
     targetKey: 'idProduct',
@@ -82,5 +83,6 @@ module.exports = {
     Employee,
     Role,
     Sales,
-    SalesDetails
-}; 
+    SalesDetails,
+    Service
+};  

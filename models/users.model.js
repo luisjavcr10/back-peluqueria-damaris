@@ -45,6 +45,14 @@ User.init({
         beforeCreate: (user, options) => {
             // Aquí puedes agregar lógica antes de crear un usuario, si es necesario
         }
+    },
+    scopes : {
+        noIdRole : {
+            attributes : {exclude : ['idRole']}
+        },
+        noActive : {
+            attributes : {exclude : ['active']}
+        }
     }
 });
 

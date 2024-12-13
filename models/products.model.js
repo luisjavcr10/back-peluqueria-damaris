@@ -24,7 +24,7 @@ Product.init({
     idCategory :{
         type : DataTypes.INTEGER,
         allowNull : false,
-        field : 'id_categoria' 
+        field : 'id_categoria' ,
     },
     price : {
         type : DataTypes.DECIMAL(10,2),
@@ -54,6 +54,17 @@ Product.init({
     sequelize,
     tableName : 'Productos',
     timestamps : false,
+    scopes : {
+        noIdCategory : {
+            attributes : {exclude : ['idCategory']}
+        },
+        noState : {
+            attributes : {exclude : ['state']}
+        },
+        orderByPrice: {
+            order: [['price', 'ASC']],
+        }
+    }
 });
 
 module.exports = Product;

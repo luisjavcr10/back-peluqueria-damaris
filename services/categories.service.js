@@ -1,4 +1,4 @@
-const Category = require('./../models/categories.model');
+const {Category} = require('./../models');
 const boom = require('@hapi/boom');
 
 class CategoriesService {
@@ -15,7 +15,7 @@ class CategoriesService {
         }
         throw error; 
     }
-
+ 
     async create(data) {
         try {
             const newCategory = await Category.create({
@@ -28,9 +28,15 @@ class CategoriesService {
         }
     }
 
-    async find() {
+    async find(query) {
         try {
-            const categories = await Category.findAll();
+            const options = {}
+            const {limit, offset} = query;
+            if(limit && offset){
+                options.limit = parseInt(limit, 10);
+                options.offset = parseInt(offset, 10);
+            }
+            const categories = await Category.findAll(options);
             return categories;
         } catch (error) {
             this._handleError(error, 'Error al obtener las categorías');

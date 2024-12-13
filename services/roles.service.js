@@ -1,4 +1,4 @@
-const Role  = require('./../models/roles.model');
+const {Role}  = require('./../models');
 const boom = require('@hapi/boom');
 
 class RoleService{
@@ -25,9 +25,15 @@ class RoleService{
         }
     };
 
-    async find(){
+    async find(query){
         try {
-            const roles = await Role.findAll();
+            const options = {}
+            const {limit, offset} = query;
+            if(limit && offset){
+                options.limit = parseInt(limit, 10);
+                options.offset = parseInt(offset, 10);
+            }
+            const roles = await Role.findAll(options);
             return roles;
         } catch (error) {
             this._handleError(error, 'Error al obtener roles');

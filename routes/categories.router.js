@@ -4,12 +4,13 @@ const CategoriesService = require('../services/categories.service');
 const service = new CategoriesService();
 const validatorHandler = require('./../middlewares/validator.handler');
 const {createCategorySchema, updatedCategorySchema,getCategorySchema} = require('./../schemas/category.schema');
+const queryPaginatorSchema = require('./../schemas/paginator.schema');
 
-
-router.get('/', 
+router.get('/',
+    validatorHandler(queryPaginatorSchema,'query'),
     async (req, res, next) => {
     try {
-        const categories = await service.find();
+        const categories = await service.find(req.query);
         res.status(200).json(categories);
     } catch (error) {
         const httpError = new Error('Error al obtener las categorias');

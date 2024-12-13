@@ -1,12 +1,16 @@
 const express = require('express');
 const router = express.Router();
-
 const ServiceService = require('../services/services.service');
 const service = new ServiceService();
+const validatorHandler = require('./../middlewares/validator.handler');
+const {createServiceSchema, updatedServiceSchema, getServiceSchema} = require('./../schemas/service.schema');
+const queryPaginatorSchema = require('./../schemas/paginator.schema');
 
-router.get('/', async(req,res,next) =>{
+router.get('/', 
+    validatorHandler(queryPaginatorSchema,'query'),
+    async(req,res,next) =>{
     try {
-        const services = await service.find();
+        const services = await service.find(req.query);
         res.status(200).json(services);
     } catch (error) {
         const httpError = new Error('Error al obtener los servicios');
@@ -15,9 +19,11 @@ router.get('/', async(req,res,next) =>{
     }
 });
 
-router.get('/:id', async(req,res) =>{
-    const {id} = req.params;
+router.get('/:id', 
+    validatorHandler(getServiceSchema, 'params'),
+    async(req,res, next) =>{
     try {
+        const {id} = req.params;
         const aService = await service.findById(id);
         res.status(200).json(aService);
     } catch (error) {
@@ -27,9 +33,11 @@ router.get('/:id', async(req,res) =>{
     }
 });
 
-router.post('/', async(req,res) =>{
-    const body = req.body;
+router.post('/', 
+    validatorHandler(createServiceSchema, 'body'),
+    async(req,res, next) =>{
     try {
+        const body = req.body;
         const newService =  await service.create(body)
         res.json(newService);
     } catch (error) {
@@ -39,10 +47,13 @@ router.post('/', async(req,res) =>{
     }
 });
 
-router.put('/:id', async(req,res) =>{
-    const {id} = req.params;
-    const changes = req.body;
+router.put('/:id', 
+    validatorHandler(getServiceSchema, 'params'),
+    validatorHandler(updatedServiceSchema, 'body'),
+    async(req,res, next) =>{
     try {
+        const {id} = req.params;
+        const changes = req.body;
         const updatedService = await service.update(id,changes);
         res.json(updatedService);
     } catch (error) {
@@ -52,9 +63,11 @@ router.put('/:id', async(req,res) =>{
     }
 });
 
-router.delete('/:id', async(req,res) =>{
-    const {id} = req.params;
+router.delete('/:id', 
+    validatorHandler(getServiceSchema, 'params'),
+    async(req,res, next) =>{
     try {
+        const {id} = req.params;
         const result = await service.delete(id);
         res.json(result);
     } catch (error) {

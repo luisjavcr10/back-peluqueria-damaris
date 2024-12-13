@@ -1,4 +1,4 @@
-const User = require('./../models/users.model');
+const {User, Role} = require('./../models');
 const boom = require('@hapi/boom');
 
 class UserService {
@@ -27,17 +27,37 @@ class UserService {
         }
     };
 
-    async find(){
+    async find(query){
         try {
-            return await User.find();
+            const options = {
+                include : [{
+                    model : Role,
+                    as : 'rol',
+                    attributes : ['name','description']
+                }]
+            }
+            const {limit, offset} = query;
+            if(limit && offset){
+                options.limit = parseInt(limit, 10);
+                options.offset = parseInt(offset, 10);
+            }
+                options.limit = limit;
+            const users =  await User.scope('noIdRole','noActive').findAll(options);
+            return users; 
         } catch (error) {
-            tthis._handleError(error,'No se pudo encontrar los servicios');
+            this._handleError(error,'No se pudo encontrar los servicios');
         }
     };
 
     async findById(id){
         try {
-            const user = User.findById(id);
+            const user = await User.scope('noIdRole','noActive').findByPk(id,{
+                include : [{
+                    model : Role,
+                    as : 'rol',
+                    attributes : ['name','description']
+                }]
+            });
             if(!user){
                 throw boom,boom.notFound(`User con Id: ${id} no encontrado`);
             }
@@ -49,7 +69,12 @@ class UserService {
 
     async update(id, changes){
         try {
-            return await User.findByIdAndUpdate(id, changes, { new: true });
+            const user = await User.findByPk(id);
+            if(!user){
+                throw boom,boom.notFound(`User con Id: ${id} no encontrado`);
+            }
+            const updatedUser = await user.update(changes);
+            return updatedUser;
         } catch (error) {
             this._handleError(error,'No se pudo actualizar el servicio');
         }
@@ -57,7 +82,14 @@ class UserService {
 
     async delete(id){
         try {
-            return await User.findByIdAndDelete(id);
+            const user = await User.findByPk(id);
+            if(!user){
+                throw boom,boom.notFound(`User con Id: ${id} no encontrado`);
+            }
+            await user.destroy();
+            return {
+                message: `Usuario con el id: ${id} eliminado correctamente`
+            };
         } catch (error) {
             this._handleError(error,'No se pudo eliminar el servicio');
         }

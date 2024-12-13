@@ -1,4 +1,4 @@
-const Product = require('./../models/products.model');
+const {Product, Category} = require('./../models')
 const boom = require('@hapi/boom');
 
 class ProductService {
@@ -31,9 +31,21 @@ class ProductService {
         } 
     }
 
-    async find(){
+    async find(query){
         try {
-            const products =  await Product.findAll();
+            const options = {
+                include: [{
+                    model: Category,
+                    as: 'category',
+                    attributes : ['name', 'description']
+                }]
+            }
+            const {limit, offset} = query;
+            if(limit && offset){
+                options.limit = parseInt(limit, 10);
+                options.offset = parseInt(offset, 10);
+            }
+            const products =  await Product.scope('noIdCategory','noState','orderByPrice').findAll(options);
             return products;
         } catch (error) {
             this._handleError(error, 'Error al obtener productos');
@@ -42,7 +54,13 @@ class ProductService {
 
     async findById(id){
         try {
-            const product = Product.findByPk(id);
+            const product = Product.scope('noIdCategory','noState').findByPk(id,{
+                include : [{
+                    model: Category,
+                    as: 'category',
+                    attributes : ['name', 'description']
+                }]
+            });
             if(!product){
                 throw boom.notFound(`El producto con id: ${id} no se encontró`);
             }

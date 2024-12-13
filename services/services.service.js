@@ -1,4 +1,4 @@
-const Service = require('./../models/services.model');
+const {Service} = require('./../models')
 const boom = require('@hapi/boom');
 
 class ServiceService {
@@ -26,9 +26,15 @@ class ServiceService {
         }
     };
 
-    async find (){
+    async find (query){
         try {
-            const services = await Service.findAll();
+            const options = {}
+            const {limit, offset} = query;
+            if(limit && offset){
+                options.limit = parseInt(limit, 10);
+                options.offset = parseInt(offset, 10);
+            }
+            const services = await Service.scope('noState').findAll(options);
             return services;
         } catch (error) {
             this._handleError(error,'Error al obtener servicios');
@@ -37,7 +43,7 @@ class ServiceService {
 
     async findById (id){
         try {
-            const service = Service.findByPk(id);
+            const service = Service.scope('noState').findByPk(id);
             if(!service){
                 throw boom.notFound(`El servicio con id: ${id} no fue encontrado.`);
             }

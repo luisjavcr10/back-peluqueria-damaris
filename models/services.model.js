@@ -34,7 +34,12 @@ Service.init({
 },{
     sequelize,
     tableName : 'Servicios',
-    timestamps : false
+    timestamps : false,
+    scopes : {
+        noState : {
+            attributes : {exclude : ['state']}
+        }
+    }
 });
 
 module.exports = Service;

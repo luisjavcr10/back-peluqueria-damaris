@@ -1,4 +1,4 @@
-const Employee = require('./../models/employees.model');
+const {Employee} =  require('./../models')
 const boom = require('@hapi/boom');
 
 class EmployeeService {
@@ -26,9 +26,16 @@ class EmployeeService {
         }
     };
 
-    async find(){
+    async find(query){
         try {
-            return await Employee.find();
+            const options = {}
+            const {limit, offset} = query;
+            if(limit && offset){
+                options.limit = parseInt(limit, 10);
+                options.offset = parseInt(offset, 10);
+            }
+            const employees = Employee.findAll(options);
+            return employees
         } catch (error) {
             this._handleError(error, 'Error al obtener empleados');
         }

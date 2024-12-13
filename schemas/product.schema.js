@@ -7,8 +7,9 @@ const idCategory = Joi.number().integer();
 const price = Joi.number().precision(2);
 const stock = Joi.number().integer();
 const arrivalDate = Joi.date().iso();
-const expirationDate = Joi.date.iso();
+const expirationDate = Joi.date().iso();
 const state = Joi.boolean();
+
 
 const createdProductSchema = Joi.object({
     name : nameProduct.required(),

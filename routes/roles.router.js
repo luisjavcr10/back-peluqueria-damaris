@@ -1,12 +1,16 @@
 const express = require('express');
 const router = express.Router();
-
 const RoleService = require('../services/roles.service');
 const service = new RoleService();
+const validatorHandler = require('./../middlewares/validator.handler');
+const {createRoleSchema, updateRoleSchema, getRoleSchema} = require('./../schemas/role.schema');
+const queryPaginatorSchema = require('./../schemas/paginator.schema');
 
-router.get('/', async (req, res, next) => {
+router.get('/', 
+    validatorHandler(queryPaginatorSchema,'query'),
+    async (req, res, next) => {
     try {
-        const roles = await service.find();
+        const roles = await service.find(req.query);
         res.status(200).json(roles);
     } catch (error) {
         const httpError = new Error('Error al obtener los roles');
@@ -15,9 +19,11 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
-    const { id } = req.params;
+router.get('/:id', 
+    validatorHandler(getRoleSchema, 'params'),
+    async (req, res, next) => {
     try {
+        const { id } = req.params;
         const role = await service.findById(id);
         res.status(200).json(role);
     } catch (error) {
@@ -27,9 +33,11 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
-    const body = req.body;
+router.post('/', 
+    validatorHandler(createRoleSchema, 'body'),
+    async (req, res, next) => {
     try {
+        const body = req.body;
         const newRole = await service.create(body);
         res.json(newRole);
     } catch (error) {
@@ -39,10 +47,13 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
-    const { id } = req.params;
-    const changes = req.body;
+router.put('/:id', 
+    validatorHandler(getRoleSchema, 'params'),
+    validatorHandler(updateRoleSchema, 'body'),
+    async (req, res, next) => {
     try {
+        const { id } = req.params;
+        const changes = req.body;
         const updatedRole = await service.update(id, changes);
         res.json(updatedRole);
     } catch (error) {
@@ -52,9 +63,11 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
-    const { id } = req.params;
+router.delete('/:id',
+    validatorHandler(getRoleSchema, 'params'),
+    async (req, res, next) => {
     try {
+        const { id } = req.params;
         const result = await service.delete(id);
         res.json(result);
     } catch (error) {
