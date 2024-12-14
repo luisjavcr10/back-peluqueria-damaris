@@ -15,7 +15,7 @@ Category.hasMany(Product, {
     as: 'products'
 });
 
-Product.belongsTo(Category, {
+Product.belongsTo(Category, { 
     foreignKey: 'idCategory',
     targetKey: 'idCategory',
     as: 'category'

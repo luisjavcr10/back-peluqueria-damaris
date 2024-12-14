@@ -11,34 +11,38 @@ const expirationDate = Joi.date().iso();
 const state = Joi.boolean();
 
 
-const createdProductSchema = Joi.object({
-    name : nameProduct.required(),
-    descripcion : descripcion.optional(),
-    idCategory : idCategory.required(),
-    price : price.required(),
-    stock : stock.optional(),
-    arrivalDate : arrivalDate.required(),
-    expirationDate : expirationDate.required(),
-    state : state.optional()
-});
+class ProductSchema {
+    static create() {
+        return Joi.object({
+            name : nameProduct.required(),
+            description : descripcion.optional(),
+            idCategory : idCategory.required(),
+            price : price.required(),
+            stock : stock.optional(),
+            arrivalDate : arrivalDate.required(),
+            expirationDate : expirationDate.required(),
+            state : state.optional()
+        });
+    }
 
-const updatedProductSchema = Joi.object({
-    name : nameProduct.optional(),
-    descripcion : descripcion.optional(),
-    idCategory : idCategory.optional(),
-    price : price.optional(),
-    stock : stock.optional(),
-    arrivalDate : arrivalDate.optional(),
-    expirationDate : expirationDate.optional(),
-    state : state.optional()
-});
+    static update() {
+        return Joi.object({
+            name : nameProduct.optional(),
+            description : descripcion.optional(),
+            idCategory : idCategory.optional(),
+            price : price.optional(),
+            stock : stock.optional(),
+            arrivalDate : arrivalDate.optional(),
+            expirationDate : expirationDate.optional(),
+            state : state.optional()
+        });
+    }
 
-const getProductSchema = Joi.object({
-    id : idProduct.required()
-});
-
-module.exports = {
-    createdProductSchema,
-    updatedProductSchema,
-    getProductSchema
+    static get() {
+        return Joi.object({
+            id : idProduct.required()
+        });
+    }
 }
+
+module.exports = ProductSchema;

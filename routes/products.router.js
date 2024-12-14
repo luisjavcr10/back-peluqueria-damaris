@@ -2,12 +2,11 @@ const express = require('express');
 const router = express.Router();
 const ProductService = require('../services/products.service');
 const service = new ProductService();
-const validatorHandler = require('./../middlewares/validator.handler');
-const {createdProductSchema, updatedProductSchema, getProductSchema} = require('./../schemas/product.schema');
-const queryPaginatorSchema = require('./../schemas/paginator.schema');
+const {ValidatorHandler} = require('../middlewares');
+const {ProductSchema, PaginatorSchema} = require('../schemas');
 
 router.get('/', 
-    validatorHandler(queryPaginatorSchema,'query'),
+    ValidatorHandler.handle(PaginatorSchema.query(),'query'),
     async (req, res, next) => {
     try {
         const categories = await service.find(req.query);
@@ -20,7 +19,7 @@ router.get('/',
 });
 
 router.get('/:id', 
-    validatorHandler(getProductSchema,'params'),
+    ValidatorHandler.handle(ProductSchema.get(),'params'),
     async(req,res, next)=>{
     try {
         const {id} = req.params;
@@ -34,7 +33,7 @@ router.get('/:id',
 });
 
 router.post('/', 
-    validatorHandler(createdProductSchema,'body'),
+    ValidatorHandler.handle(ProductSchema.create(),'body'),
     async(req,res, next)=>{
     try {
         const body = req.body;
@@ -48,8 +47,8 @@ router.post('/',
 });
 
 router.put('/:id', 
-    validatorHandler(getProductSchema,'params'),
-    validatorHandler(updatedProductSchema,'body'),
+    ValidatorHandler.handle(ProductSchema.get(),'params'),
+    ValidatorHandler.handle(ProductSchema.update(),'body'),
     async(req,res, next)=>{
     try {
         const {id} = req.params;
@@ -64,7 +63,7 @@ router.put('/:id',
 });
 
 router.delete('/:id', 
-    validatorHandler(getProductSchema,'params'),
+    ValidatorHandler.handle(ProductSchema.get(),'params'),
     async(req,res, next)=>{
     try {
         const {id} = req.params;

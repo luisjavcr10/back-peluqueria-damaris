@@ -1,5 +1,7 @@
 const {Service} = require('./../models')
 const boom = require('@hapi/boom');
+const {ServiceSchema} = require('./../schemas')
+const {ValidatorHandler} = require('./../middlewares')
 
 class ServiceService {
     constructor(){}
@@ -14,6 +16,7 @@ class ServiceService {
 
     async create (data){
         try {
+            
             const newService = await Service.create({
                     name : data.name,
                     description: data.description,

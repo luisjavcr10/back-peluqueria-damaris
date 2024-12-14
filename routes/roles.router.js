@@ -2,12 +2,12 @@ const express = require('express');
 const router = express.Router();
 const RoleService = require('../services/roles.service');
 const service = new RoleService();
-const validatorHandler = require('./../middlewares/validator.handler');
-const {createRoleSchema, updateRoleSchema, getRoleSchema} = require('./../schemas/role.schema');
-const queryPaginatorSchema = require('./../schemas/paginator.schema');
+const {ValidatorHandler} = require('../middlewares');
+
+const {RoleSchema, PaginatorSchema} = require('./../schemas');
 
 router.get('/', 
-    validatorHandler(queryPaginatorSchema,'query'),
+    ValidatorHandler.handle(PaginatorSchema.query(),'query'),
     async (req, res, next) => {
     try {
         const roles = await service.find(req.query);
@@ -20,7 +20,7 @@ router.get('/',
 });
 
 router.get('/:id', 
-    validatorHandler(getRoleSchema, 'params'),
+    ValidatorHandler.handle(RoleSchema.get(), 'params'),
     async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -34,7 +34,7 @@ router.get('/:id',
 });
 
 router.post('/', 
-    validatorHandler(createRoleSchema, 'body'),
+    ValidatorHandler.handle(RoleSchema.create(), 'body'),
     async (req, res, next) => {
     try {
         const body = req.body;
@@ -48,8 +48,8 @@ router.post('/',
 });
 
 router.put('/:id', 
-    validatorHandler(getRoleSchema, 'params'),
-    validatorHandler(updateRoleSchema, 'body'),
+    ValidatorHandler.handle(RoleSchema.get(), 'params'),
+    ValidatorHandler.handle(RoleSchema.update(), 'body'),
     async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -64,7 +64,7 @@ router.put('/:id',
 });
 
 router.delete('/:id',
-    validatorHandler(getRoleSchema, 'params'),
+    ValidatorHandler.handle(RoleSchema.get(), 'params'),
     async (req, res, next) => {
     try {
         const { id } = req.params;

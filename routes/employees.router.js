@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 const EmployeeService = require('../services/employees.service');
 const service = new EmployeeService();
-const validatorHandler = require('./../middlewares/validator.handler');
-const {createEmployeeSchema,updateEmployeeSchema,getEmployeeSchema} = require('./../schemas/employee.schema');
-const queryPaginatorSchema = require('./../schemas/paginator.schema');
+const {ValidatorHandler} = require('../middlewares');
+const {EmployeeSchema, PaginatorSchema} = require('./../schemas');
+
 
 
 router.get('/', 
-    validatorHandler(queryPaginatorSchema,'query'),
+    ValidatorHandler.handle(PaginatorSchema.query,'query'),
     async (req, res, next) => {
     try {
         const employees = await service.find(req.query);
@@ -21,7 +21,7 @@ router.get('/',
 });
 
 router.get('/:id', 
-    validatorHandler(getEmployeeSchema,'params'),
+    ValidatorHandler.handle(EmployeeSchema.get(),'params'),
     async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -35,7 +35,7 @@ router.get('/:id',
 });
 
 router.post('/', 
-    validatorHandler(createEmployeeSchema,'body'),
+    ValidatorHandler.handle(EmployeeSchema.create(),'body'),
     async (req, res, next) => {
     try {
         const body = req.body;
@@ -49,8 +49,8 @@ router.post('/',
 });
 
 router.put('/:id', 
-    validatorHandler(getEmployeeSchema,'params'),
-    validatorHandler(updateEmployeeSchema,'body'),
+    ValidatorHandler.handle(EmployeeSchema.get(),'params'),
+    ValidatorHandler.handle(EmployeeSchema.update(),'body'),
     async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -65,7 +65,7 @@ router.put('/:id',
 });
 
 router.delete('/:id',
-    validatorHandler(getEmployeeSchema,'params'),
+    ValidatorHandler.handle(EmployeeSchema.get(),'params'),
     async (req, res, next) => {
     try {
         const { id } = req.params;

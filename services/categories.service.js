@@ -4,7 +4,6 @@ const boom = require('@hapi/boom');
 class CategoriesService {
 
     constructor(){
-        this.categories = [];
     }
 
     // Método privado para manejar errores

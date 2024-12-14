@@ -1,17 +1,16 @@
-require('./models'); // soluciono el problema con las relaciones ventas y detalles, carga los modelos e index.js antes de todos los modelos.
 const express = require('express');
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
-const swaggerUI = require('swagger-ui-express');
-const swaggerSpec = require('./config/swagger');
+//const swaggerUI = require('swagger-ui-express');
+//const swaggerSpec = require('./config/swagger');
 
 const routerApi = require('./routes');
-const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
+const {ErrorHandler} = require('./middlewares')
 
 dotenv.config();
 
 const app = express();
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+//app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 // Conexion a la base de datos
 const PORT = process.env.PORT || 3000;
@@ -39,9 +38,6 @@ app.listen(PORT, () => {
 //Llamamos las rutas
 routerApi(app);
 
-app.use(logErrors);
-app.use(boomErrorHandler);
-app.use(errorHandler);
-
-
-
+app.use(ErrorHandler.logErrors);
+app.use(ErrorHandler.boomErrorHandler);
+app.use(ErrorHandler.errorHandler);

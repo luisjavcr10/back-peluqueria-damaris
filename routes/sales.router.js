@@ -2,12 +2,11 @@ const express = require('express');
 const router = express.Router();
 const SalesService = require('../services/sales.service');
 const service = new SalesService();
-const validatorHandler = require('./../middlewares/validator.handler');
-const { createSalesSchema, getSalesSchema }= require('./../schemas/sales.schema');
-const queryPaginatorSchema = require('./../schemas/paginator.schema');
+const {ValidatorHandler} = require('../middlewares');
+const {SalesSchema, PaginatorSchema} = require('../schemas');
 
 router.get('/', 
-    validatorHandler(queryPaginatorSchema,'query'),
+    ValidatorHandler.handle(PaginatorSchema.query(),'query'),
     async(req,res, next)=>{
     try {
         const sales = await service.find(req.query);
@@ -23,7 +22,7 @@ router.get('/',
 })
 
 router.get('/:id',
-    validatorHandler(getSalesSchema,'params'),
+    ValidatorHandler.handle(SalesSchema.get(),'params'),
     async (req, res, next) =>{
     try {
         const {id} = req.params;
@@ -40,7 +39,7 @@ router.get('/:id',
 });
 
 router.post('/', 
-    validatorHandler(createSalesSchema, 'body'),
+    ValidatorHandler.handle(SalesSchema.create(), 'body'),
     async(req,res)=>{
     try {
         const {saleData, saleDetailsData} = req.body;

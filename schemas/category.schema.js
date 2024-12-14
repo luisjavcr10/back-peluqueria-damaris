@@ -1,25 +1,25 @@
 const Joi = require('joi');
 
-const idCategory = Joi.number().integer();
-const nameCategory = Joi.string().min(3).max(30);
-const description = Joi.string().min(15).max(100);
+class CategorySchema {
+    static create() {
+        return Joi.object({
+            name: Joi.string().min(3).max(30).required(),
+            description: Joi.string().min(15).max(100).required(),
+        });
+    }
 
-const createCategorySchema = Joi.object({
-    name : nameCategory.required(),
-    description : description.required()
-});
+    static update() {
+        return Joi.object({
+            name: Joi.string().min(3).max(30).optional(),
+            description: Joi.string().min(15).max(100).optional(),
+        });
+    }
 
-const updatedCategorySchema = Joi.object({
-    name : nameCategory.optional(),
-    description : description.optional()
-});
-
-const getCategorySchema = Joi.object({
-    id: idCategory.required()
-});
-
-module.exports = {
-    createCategorySchema,
-    updatedCategorySchema,
-    getCategorySchema
+    static get() {
+        return Joi.object({
+            id: Joi.number().integer().required(),
+        });
+    }
 }
+
+module.exports = CategorySchema;

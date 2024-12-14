@@ -2,12 +2,12 @@ const express = require('express');
 const router = express.Router();
 const UserService = require('../services/users.service');
 const service = new UserService();
-const validatorHandler = require('./../middlewares/validator.handler');
-const {createUserSchema, updateUserSchema, getUserSchema} = require('./../schemas/user.schema');
-const queryPaginatorSchema = require('./../schemas/paginator.schema');
+const {ValidatorHandler} = require('../middlewares');
+const {UserSchema, PaginatorSchema} = require('../schemas');
+
 
 router.get('/', 
-    validatorHandler(queryPaginatorSchema,'query'),
+    ValidatorHandler.handle(PaginatorSchema.query(),'query'),
     async (req, res, next) => {
     try {
         const users = await service.find(req.query);
@@ -21,7 +21,7 @@ router.get('/',
 });
 
 router.get('/:id', 
-    validatorHandler(getUserSchema, 'params'),
+    ValidatorHandler.handle(UserSchema.get(), 'params'),
     async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -35,7 +35,7 @@ router.get('/:id',
 });
 
 router.post('/', 
-    validatorHandler(createUserSchema,'body'),
+    ValidatorHandler.handle(UserSchema.create(),'body'),
     async (req, res, next) => {
     try {
         const body = req.body;
@@ -49,8 +49,8 @@ router.post('/',
 });
 
 router.put('/:id', 
-    validatorHandler(getUserSchema, 'params'),
-    validatorHandler(updateUserSchema,'body'),
+    ValidatorHandler.handle(UserSchema.get(), 'params'),
+    ValidatorHandler.handle(UserSchema.update(),'body'),
     async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -65,7 +65,7 @@ router.put('/:id',
 });
 
 router.delete('/:id', 
-    validatorHandler(getUserSchema, 'params'),
+    ValidatorHandler.handle(UserSchema.get(), 'params'),
     async (req, res, next) => { 
     try {
         const { id } = req.params;

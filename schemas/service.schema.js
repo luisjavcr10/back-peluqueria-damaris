@@ -6,27 +6,30 @@ const description = Joi.string().min(10).max(255);
 const price = Joi.number().precision(2);
 const state = Joi.boolean();
 
+class ServiceSchema {
+    static create() {
+        return Joi.object({
+            name : nameService.required(),
+            description : description.optional(),
+            price : price.required(),
+            state : state.optional()
+        });
+    }
 
-const createServiceSchema = Joi.object({
-    name : nameService.required(),
-    description : description.optional(),
-    price : price.required(),
-    state : state.optional()
-});
+    static update() {
+        return Joi.object({
+            name : nameService.optional(),
+            description : description.optional(),
+            price : price.optional(),
+            state : state.optional()
+        });
+    }
 
-const updatedServiceSchema = Joi.object({
-    name : nameService.optional(),
-    description : description.optional(),
-    price : price.optional(),
-    state : state.optional()
-});
+    static get() {
+        return Joi.object({
+            id : idService.required()
+        });
+    }
+}
 
-const getServiceSchema = Joi.object({
-    id : idService.required()
-});
-
-module.exports = {
-    createServiceSchema,
-    updatedServiceSchema,
-    getServiceSchema
-};
+module.exports = ServiceSchema;

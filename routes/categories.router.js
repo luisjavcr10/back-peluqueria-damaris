@@ -2,12 +2,11 @@ const express = require('express');
 const router = express.Router();
 const CategoriesService = require('../services/categories.service');
 const service = new CategoriesService();
-const validatorHandler = require('./../middlewares/validator.handler');
-const {createCategorySchema, updatedCategorySchema,getCategorySchema} = require('./../schemas/category.schema');
-const queryPaginatorSchema = require('./../schemas/paginator.schema');
+const {ValidatorHandler} = require('../middlewares');
+const {CategorySchema,PaginatorSchema} = require('./../schemas');
 
 router.get('/',
-    validatorHandler(queryPaginatorSchema,'query'),
+    ValidatorHandler.handle(PaginatorSchema.query(),'query'),
     async (req, res, next) => {
     try {
         const categories = await service.find(req.query);
@@ -20,7 +19,7 @@ router.get('/',
 });
 
 router.get('/:id',
-    validatorHandler(getCategorySchema,'params'),
+    ValidatorHandler.handle(CategorySchema.get(),'params'),
     async(req,res,next) => {
     try {
         const {id} = req.params;
@@ -34,7 +33,7 @@ router.get('/:id',
 });
 
 router.post('/', 
-    validatorHandler(createCategorySchema,'body'),
+    ValidatorHandler.handle(CategorySchema.create(),'body'),
     async (req,res,next) => {
     try {  
         const body = req.body;
@@ -48,8 +47,8 @@ router.post('/',
 });
 
 router.put('/:id', 
-    validatorHandler(getCategorySchema,'params'),
-    validatorHandler(updatedCategorySchema,'body'),
+    ValidatorHandler.handle(CategorySchema.get(),'params'),
+    ValidatorHandler.handle(CategorySchema.update(),'body'),
     async (req,res,next) => {
     try {   
         const {id} = req.params;
@@ -64,7 +63,7 @@ router.put('/:id',
 });
 
 router.delete('/:id', 
-    validatorHandler(getCategorySchema,'params'),
+    ValidatorHandler.handle(CategorySchema.get(),'params'),
     async (req,res,next) => {
     try {
         const {id} = req.params;
