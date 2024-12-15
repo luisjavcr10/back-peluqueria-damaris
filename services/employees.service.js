@@ -1,4 +1,5 @@
-const {Employee} =  require('./../models')
+const sequelize = require('../config/db');
+const {Employee, User} =  require('./../models')
 const boom = require('@hapi/boom');
 
 class EmployeeService {
@@ -12,15 +13,24 @@ class EmployeeService {
         }
         throw error; 
     }
-
+ 
     async create(data){
+        const t = await sequelize.transaction();
         try {
-            if (!data.idUser) {
-                throw new Error('El idUser es requerido');
-            }
-            const employee = new Employee(data);
-            await employee.save();
-            return employee;
+            const newUser = await User.create({
+                name : data.name,
+                email : data.email,
+                passwordHash : data.passwordHash,
+                idRole : data.idRole
+            },{transaction:t});
+            const newEmployee = await Employee.create({
+                idUser : newUser.idUser,
+                name : data.name,
+                phone : data.phone,
+                adress : data.adress,
+            },{transaction:t});
+            await t.commit();
+            return newEmployee;
         } catch (error) {
             this._handleError(error,'Error al crear el empleado:' );
         }
@@ -43,7 +53,11 @@ class EmployeeService {
 
     async findById(id){
         try {
-            return await Employee.findById(id);
+            const employee = await Employee.findByPk(id);
+            if (!employee) {
+                throw boom.notFound('Empleado no encontrado');
+            }
+            return employee;
         } catch (error) {
             this._handleError(error, 'Error al buscar el empleado');
         }

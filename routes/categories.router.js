@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const CategoriesService = require('../services/categories.service');
-const service = new CategoriesService();
 const {ValidatorHandler} = require('../middlewares');
 const {CategorySchema,PaginatorSchema} = require('./../schemas');
+const CategoriesService = require('../services/categories.service');
+const service = new CategoriesService();
+const {checkApiKey} = require('./../middlewares/auth.handler');
 
-router.get('/',
+router.get('/',checkApiKey,
     ValidatorHandler.handle(PaginatorSchema.query(),'query'),
     async (req, res, next) => {
     try {

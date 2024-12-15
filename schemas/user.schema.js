@@ -36,3 +36,4 @@ class UserSchema {
 }
 
 module.exports = UserSchema;
+ 

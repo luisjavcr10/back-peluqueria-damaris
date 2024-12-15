@@ -1,41 +1,62 @@
 const Joi = require('joi');
 
-const idSales = Joi.number().integer();
-const idUser = Joi.number().integer();
-const total = Joi.number().precision(2);
-const date = Joi.date().iso();
-const nameCustomer = Joi.string().min(5).max(50);
+// Esquema para validar "saleData"
+const saleDataSchema = Joi.object({
+    idUser: Joi.number().integer().required(),
+    total: Joi.number().precision(2).positive().required(),
+    nameCustomer: Joi.string().min(3).max(100).required(),
+});
+
+// Esquema para validar un solo elemento en "saleDetailsData"
+const saleDetailsItemSchema = Joi.object({
+    id : Joi.number().integer(),
+    type: Joi.string().valid('producto', 'servicio').required(),
+    idProduct: Joi.number().integer().allow(null).when('type', {
+        is: 'producto',
+        then: Joi.required(),
+        otherwise: Joi.forbidden(),
+    }),
+    idService: Joi.number().integer().allow(null).when('type', {
+        is: 'servicio',
+        then: Joi.required(),
+        otherwise: Joi.forbidden(),
+    }),
+    quantity: Joi.number().integer().positive().required(),
+    unitPrice: Joi.number().precision(2).positive().required(),
+    subtotal: Joi.number().precision(2).positive().required(),
+});
+
+// Esquema para validar el JSON completo
+const saleSchema = Joi.object({
+    saleData: saleDataSchema.required(),
+    saleDetailsData: Joi.array()
+        .items(saleDetailsItemSchema)
+        .min(1)
+        .required(),
+});
+
+// Esquema para obtener una venta por su ID
+const getSalesSchema = Joi.object({
+    id: Joi.number().integer().required(),
+});
 
 class SalesSchema {
-    static create() {
-        return Joi.object({
-            id: Joi.number().integer().required(),
-            idSales: idSales.required(),
-            type: Joi.string().valid('servicio', 'producto').required(),
-            idProduct: Joi.number().integer().allow(null),
-            idService: Joi.number().integer().allow(null),
-            quantity: Joi.number().integer().required(),
-            unitPrice: Joi.number().precision(2).required(),
-            subtotal: Joi.number().precision(2).required()
-        });
+    static getSaleDataSchema() {
+        return saleDataSchema;
     }
 
-    static update() {
-        return Joi.object({
-            idUser: idUser.required(),
-            total: total.required(),
-            date: date.required(),
-            nameCustomer: nameCustomer.required(),
-            details: Joi.array().items(salesDetailSchema).required()
-        });
+    static getSaleDetailsItemSchema() {
+        return saleDetailsItemSchema;
     }
 
-    static get() {
-        return Joi.object({
-            id: idSales.required()
-        });
+    static getSaleSchema() {
+        return saleSchema;
+    }
+
+    static getGetSalesSchema() {
+        return getSalesSchema;
     }
 }
 
+// Exportar la clase en lugar de los esquemas directamente
 module.exports = SalesSchema;
-

@@ -5,7 +5,6 @@ const service = new UserService();
 const {ValidatorHandler} = require('../middlewares');
 const {UserSchema, PaginatorSchema} = require('../schemas');
 
-
 router.get('/', 
     ValidatorHandler.handle(PaginatorSchema.query(),'query'),
     async (req, res, next) => {

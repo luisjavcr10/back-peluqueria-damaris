@@ -6,9 +6,8 @@ const {ValidatorHandler} = require('../middlewares');
 const {EmployeeSchema, PaginatorSchema} = require('./../schemas');
 
 
-
 router.get('/', 
-    ValidatorHandler.handle(PaginatorSchema.query,'query'),
+    ValidatorHandler.handle(PaginatorSchema.query(),'query'),
     async (req, res, next) => {
     try {
         const employees = await service.find(req.query);

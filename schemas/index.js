@@ -7,7 +7,6 @@ const SalesSchema = require('./sales.schema');
 const ServiceSchema = require('./service.schema');
 const UserSchema = require('./user.schema');
 
-
 module.exports = {
     CategorySchema,
     PaginatorSchema,

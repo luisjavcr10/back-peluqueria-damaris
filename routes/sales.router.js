@@ -4,7 +4,13 @@ const SalesService = require('../services/sales.service');
 const service = new SalesService();
 const {ValidatorHandler} = require('../middlewares');
 const {SalesSchema, PaginatorSchema} = require('../schemas');
-
+/*const {
+    saleDataSchema,
+    saleDetailsItemSchema,
+    saleSchema,
+    getSalesSchema,
+} = require('./../schemas/sales.schema')*/
+ 
 router.get('/', 
     ValidatorHandler.handle(PaginatorSchema.query(),'query'),
     async(req,res, next)=>{
@@ -22,7 +28,7 @@ router.get('/',
 })
 
 router.get('/:id',
-    ValidatorHandler.handle(SalesSchema.get(),'params'),
+    ValidatorHandler.handle(SalesSchema.getGetSalesSchema(),'params'),
     async (req, res, next) =>{
     try {
         const {id} = req.params;
@@ -39,10 +45,10 @@ router.get('/:id',
 });
 
 router.post('/', 
-    ValidatorHandler.handle(SalesSchema.create(), 'body'),
-    async(req,res)=>{
+    ValidatorHandler.handle(SalesSchema.getSaleSchema(), 'body'),
+    async(req,res,next)=>{
     try {
-        const {saleData, saleDetailsData} = req.body;
+        const {saleData,saleDetailsData} = req.body;
         const newSale = await service.createSalesWithDetails(saleData,saleDetailsData);
         res.status(201).json({
             message: 'Venta registrada exitosamente',

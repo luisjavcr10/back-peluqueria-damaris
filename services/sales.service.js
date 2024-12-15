@@ -1,10 +1,6 @@
-//require('./../models');// soluciono el problema con las relaciones ventas y detalles, carga los modelos e index.js antes de todos los modelos.
-//const Sale = require('./../models/sales.model');
-//const SalesDetails = require('./../models/salesDetails.model');
 const {Sales, SalesDetails} = require('./../models')
 const sequelize = require('./../config/db');
 const boom = require('@hapi/boom');
-//const e = require('express');
 
 
 class SalesService {
@@ -18,7 +14,7 @@ class SalesService {
         throw error; 
     }
 
-        async find(query){
+    async find(query){
             try {
                 const options = {
                     include: [{
@@ -38,7 +34,7 @@ class SalesService {
             } catch (error) {
                 this._handleError(error,'No se encontraron las ventas')
             }
-        };
+    };
 
     async findById(id){
         try {

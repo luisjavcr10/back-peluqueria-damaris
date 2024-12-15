@@ -3,7 +3,6 @@ const router = express.Router();
 const RoleService = require('../services/roles.service');
 const service = new RoleService();
 const {ValidatorHandler} = require('../middlewares');
-
 const {RoleSchema, PaginatorSchema} = require('./../schemas');
 
 router.get('/', 
