@@ -12,10 +12,7 @@ router.get('/',
         const users = await service.find(req.query);
         res.status(200).json(users);
     } catch (error) {
-        console.error(error);
-        const httpError = new Error('Error al obtener los usuarios');
-        httpError.status = 500;
-        next(httpError);
+        next(error);
     }
 });
 
@@ -27,9 +24,7 @@ router.get('/:id',
         const user = await service.findById(id);
         res.status(200).json(user);
     } catch (error) {
-        const httpError = new Error('Error al encontrar el usuario');
-        httpError.status = 404;
-        next(httpError);
+        next(error);
     }
 });
 
@@ -41,9 +36,7 @@ router.post('/',
         const newUser = await service.create(body);
         res.json(newUser);
     } catch (error) {
-        const httpError = new Error('Error al crear el usuario');
-        httpError.status = 400;
-        next(httpError);
+        next(error);
     }
 });
 
@@ -57,9 +50,7 @@ router.put('/:id',
         const updatedUser = await service.update(id, changes);
         res.json(updatedUser);
     } catch (error) {
-        const httpError = new Error('Error al actualizar el usuario');
-        httpError.status = 404;
-        next(httpError);
+        next(error);
     }
 });
 
@@ -71,10 +62,7 @@ router.delete('/:id',
         const result = await service.delete(id);
         res.json(result);
     } catch (error) {
-        console.log(error);
-        const httpError = new Error('Error al eliminar el usuario');
-        httpError.status = 404;
-        next(httpError);
+        next(error);
     }
 });
 

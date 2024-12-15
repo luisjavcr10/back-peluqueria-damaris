@@ -6,7 +6,6 @@ class CategoriesService {
     constructor(){
     }
 
-    // Método privado para manejar errores
     _handleError(error, message) {
         if (!boom.isBoom(error)) {
             console.error('Error inesperado:', error.message);

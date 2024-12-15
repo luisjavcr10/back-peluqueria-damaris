@@ -4,12 +4,6 @@ const SalesService = require('../services/sales.service');
 const service = new SalesService();
 const {ValidatorHandler} = require('../middlewares');
 const {SalesSchema, PaginatorSchema} = require('../schemas');
-/*const {
-    saleDataSchema,
-    saleDetailsItemSchema,
-    saleSchema,
-    getSalesSchema,
-} = require('./../schemas/sales.schema')*/
  
 router.get('/', 
     ValidatorHandler.handle(PaginatorSchema.query(),'query'),
@@ -21,9 +15,7 @@ router.get('/',
             sales
         });
     } catch (error) {
-        const httpError = new Error('Error al obtener los ventas');
-        httpError.status = 500;
-        next(httpError)
+        next(error);
     }
 })
 
@@ -38,9 +30,7 @@ router.get('/:id',
             sale
         })
     } catch (error) {
-        const httpError = new Error('Error al encontrar la venta');
-        httpError.status = 404;
-        next(httpError);
+        next(error);
     }
 });
 
@@ -55,9 +45,7 @@ router.post('/',
             sale: newSale
         })
     } catch (error) {
-        const httpError = new Error('Error al registrar la venta');
-        httpError.status = 400;
-        next(httpError);
+        next(error);
     }
 });
 

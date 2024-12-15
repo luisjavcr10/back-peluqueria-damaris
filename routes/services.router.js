@@ -12,9 +12,7 @@ router.get('/',
         const services = await service.find(req.query);
         res.status(200).json(services);
     } catch (error) {
-        const httpError = new Error('Error al obtener los servicios');
-        httpError.status = 500;
-        next(httpError);
+        next(error);
     }
 });
 
@@ -25,10 +23,8 @@ router.get('/:id',
         const {id} = req.params;
         const aService = await service.findById(id);
         res.status(200).json(aService);
-    } catch (error) {
-        const httpError = new Error('Error al encontrar el servicio');
-        httpError.status = 404;
-        next(httpError);
+    }catch (error) {
+        next(error);
     }
 });
 
@@ -40,9 +36,7 @@ router.post('/',
         const newService =  await service.create(body)
         res.json(newService);
     } catch (error) {
-        const httpError = new Error('Error al crear el servicio');
-        httpError.status = 400;
-        next(httpError);
+        next(error);
     }
 });
 
@@ -56,9 +50,7 @@ router.put('/:id',
         const updatedService = await service.update(id,changes);
         res.json(updatedService);
     } catch (error) {
-        const httpError = new Error('Error al actualizar el servicio');
-        httpError.status = 404;
-        next(httpError);
+        next(error);
     }
 });
 
@@ -70,9 +62,7 @@ router.delete('/:id',
         const result = await service.delete(id);
         res.json(result);
     } catch (error) {
-        const httpError = new Error('Error al eliminar el servicio');
-        httpError.status = 404;
-        next(httpError);
+        next(error);
     }
 });
 

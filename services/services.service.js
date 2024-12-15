@@ -75,7 +75,7 @@ class ServiceService {
             if(!service){
                 throw boom.notFound(`El servicio con id: ${id} no fue encontrado.`);
             }
-            await service.destroy(id);
+            await service.destroy();
             return {
                 message : `Servicio con el id: ${id} eliminado correctamente`
             }

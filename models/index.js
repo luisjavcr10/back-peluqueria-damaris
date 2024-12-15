@@ -31,7 +31,7 @@ Role.hasMany(User, {
 User.belongsTo(Role, {
     foreignKey: 'idRole',
     targetKey: 'idRole',
-    as: 'rol'
+    as: 'role'
 });
 
 // Relación entre User y Employee

@@ -13,9 +13,7 @@ router.get('/',
         const employees = await service.find(req.query);
         res.status(200).json(employees);
     } catch (error) {
-        const httpError = new Error('Error al obtener los empleados');
-        httpError.status = 500;
-        next(httpError);
+        next(error);
     }
 });
 
@@ -27,9 +25,7 @@ router.get('/:id',
         const employee = await service.findById(id);
         res.status(200).json(employee);
     } catch (error) {
-        const httpError = new Error('Error al encontrar el empleado');
-        httpError.status = 404;
-        next(httpError);
+        next(error);
     }
 });
 
@@ -41,9 +37,7 @@ router.post('/',
         const newEmployee = await service.create(body);
         res.status(201).json(newEmployee);
     } catch (error) {
-        const httpError = new Error('Error al crear el empleado');
-        httpError.status = 400;
-        next(httpError);
+        next(error);
     }
 });
 
@@ -57,9 +51,7 @@ router.put('/:id',
         const updatedEmployee = await service.update(id, changes);
         res.status(200).json(updatedEmployee);
     } catch (error) {
-        const httpError = new Error('Error al actualizar el empleado');
-        httpError.status = 404;
-        next(httpError);
+        next(error);
     }
 });
 
@@ -71,9 +63,7 @@ router.delete('/:id',
         const result = await service.delete(id);
         res.status(204).json(result);
     } catch (error) {
-        const httpError = new Error('Error al eliminar el empleado');
-        httpError.status = 404;
-        next(httpError);
+        next(error);
     }
 });
 

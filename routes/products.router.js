@@ -12,9 +12,7 @@ router.get('/',
         const categories = await service.find(req.query);
         res.status(200).json(categories);
     } catch (error) {
-        const httpError = new Error('Error al obtener los productos');
-        httpError.status = 500;
-        next(httpError);
+        next(error);
     }
 });
 
@@ -26,9 +24,7 @@ router.get('/:id',
         const product = await service.findById(id);
         res.status(200).json(product);
     } catch (error) {
-        const httpError = new Error('Error al encontrar el producto');
-        httpError.status = 404;
-        next(httpError);
+        next(error);
     }
 });
 
@@ -40,9 +36,7 @@ router.post('/',
         const newProduct = await service.create(body);
         res.json(newProduct);
     } catch (error) {
-        const httpError = new Error('Error al crear el producto');
-        httpError.status = 400;
-        next(httpError);
+        next(error);
     }
 });
 
@@ -56,9 +50,7 @@ router.put('/:id',
         const updatedProduct = await service.update(id,changes);
         res.json(updatedProduct);
     } catch (error) {
-        const httpError = new Error('Error al actualizar el producto');
-        httpError.status = 404;
-        next(httpError);
+        next(error);
     }
 });
 
@@ -70,9 +62,7 @@ router.delete('/:id',
         const result = await service.delete(id);
         res.json(result);
     } catch (error) {
-        const httpError = new Error('Error al eliminar el producto');
-        httpError.status = 404;
-        next(httpError);
+        next(error);
     }
 });
 

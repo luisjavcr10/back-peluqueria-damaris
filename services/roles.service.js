@@ -71,7 +71,7 @@ class RoleService{
             if(!role){
                 throw new Error(`El rol con id: ${id} no se encontró`)
             };
-            await role.destroy(id);
+            await role.destroy();
             return {
                 message : `Rol con el id: ${id} eliminado correctamente`
             }

@@ -54,7 +54,7 @@ class UserService {
             const user = await User.scope('noIdRole','noActive').findByPk(id,{
                 include : [{
                     model : Role,
-                    as : 'rol',
+                    as : 'role',
                     attributes : ['name','description']
                 }]
             });

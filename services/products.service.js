@@ -89,7 +89,7 @@ class ProductService {
             if(!product){
                 throw boom.notFound(`El producto con id: ${id} no se encontró`);
             }
-            await product.destroy(id);
+            await product.destroy();
             return {
                 message : `Producto con el id: ${id} eliminado correctamente`
             }

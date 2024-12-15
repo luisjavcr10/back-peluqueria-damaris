@@ -15,7 +15,7 @@ const createEmployeeSchema = Joi.object({
     email : email.required(),
     passwordHash : passwordHash.required(),
     idRole : idRole.required()
-});
+}); 
 
 const updateEmployeeSchema = Joi.object({
     name : nameEmployee.optional(),
