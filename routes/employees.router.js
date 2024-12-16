@@ -5,10 +5,13 @@ const passport = require('passport');
 const EmployeeService = require('../services/employees.service');
 const service = new EmployeeService();
 const {ValidatorHandler} = require('../middlewares');
+const {checkRoles} = require('./../middlewares/auth.handler');
 const {EmployeeSchema, PaginatorSchema} = require('./../schemas');
 
 
 router.get('/', 
+    passport.authenticate('jwt', {session : false}), 
+    checkRoles('Administrador','Empleado'),
     ValidatorHandler.handle(PaginatorSchema.query(),'query'),
     async (req, res, next) => {
     try {
@@ -20,6 +23,8 @@ router.get('/',
 });
 
 router.get('/:id', 
+    passport.authenticate('jwt', {session : false}), 
+    checkRoles('Administrador','Empleado'),
     ValidatorHandler.handle(EmployeeSchema.get(),'params'),
     async (req, res, next) => {
     try {
@@ -32,7 +37,8 @@ router.get('/:id',
 });
 
 router.post('/',
-    passport.authenticate('jwt', {session : false}), 
+    passport.authenticate('jwt', {session : false}),
+    checkRoles(['Administrador']), 
     ValidatorHandler.handle(EmployeeSchema.create(),'body'),
     async (req, res, next) => {
     try {
@@ -46,6 +52,7 @@ router.post('/',
 
 router.put('/:id', 
     passport.authenticate('jwt', {session : false}),
+    checkRoles(['Administrador']),
     ValidatorHandler.handle(EmployeeSchema.get(),'params'),
     ValidatorHandler.handle(EmployeeSchema.update(),'body'),
     async (req, res, next) => {
@@ -61,6 +68,7 @@ router.put('/:id',
 
 router.delete('/:id',
     passport.authenticate('jwt', {session : false}),
+    checkRoles(['Administrador']),
     ValidatorHandler.handle(EmployeeSchema.get(),'params'),
     async (req, res, next) => {
     try {
