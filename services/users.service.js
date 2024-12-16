@@ -59,7 +59,7 @@ class UserService {
                 }]
             });
             if(!user){
-                throw boom,boom.notFound(`User con Id: ${id} no encontrado`);
+                throw boom.notFound(`User con Id: ${id} no encontrado`);
             }
             return user;
         } catch (error) {
@@ -71,7 +71,7 @@ class UserService {
         try {
             const user = await User.findByPk(id);
             if(!user){
-                throw boom,boom.notFound(`User con Id: ${id} no encontrado`);
+                throw boom.notFound(`User con Id: ${id} no encontrado`);
             }
             const updatedUser = await user.update(changes);
             return updatedUser;
@@ -84,7 +84,7 @@ class UserService {
         try {
             const user = await User.findByPk(id);
             if(!user){
-                throw boom,boom.notFound(`User con Id: ${id} no encontrado`);
+                throw boom.notFound(`User con Id: ${id} no encontrado`);
             }
             await user.destroy();
             return {

@@ -36,6 +36,16 @@ router.get('/:id',
     }
 });
 
+router.get('/employee/:id', async(req,res,next)=>{
+    try {
+        const {id} = req.params;
+        const sales = await service.findByUser(id);
+        return res.json(sales)
+    } catch (error) {
+        next(error);
+    }
+});
+
 router.post('/', 
     passport.authenticate('jwt', {session : false}), 
     ValidatorHandler.handle(SalesSchema.getSaleSchema(), 'body'),

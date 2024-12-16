@@ -1,4 +1,8 @@
 const {Sales, SalesDetails} = require('./../models')
+const UserService = require('./../services/users.service');
+const userService = new UserService();
+const EmployeeService = require('./../services/employees.service');
+const employeeService = new EmployeeService();
 const sequelize = require('./../config/db');
 const boom = require('@hapi/boom');
 
@@ -49,6 +53,20 @@ class SalesService {
             this._handleError(error,'No se encontraró la venta')
         }
 
+    }
+
+    async findByUser(idEmployee){
+        try {
+            const employee = await employeeService.findById(idEmployee);
+            const user = await userService.findById(employee.idUser);
+            const idUser = user.idUser;
+            const sales = await Sales.findAll({
+                where : {idUser}
+            });
+            return sales;
+        } catch (error) {
+            this._handleError(error,'No se encontraron ventas para este usuario')
+        }
     }
 
     async createSalesWithDetails (saleData, saleDetailsData){
