@@ -1,37 +1,26 @@
 const express = require('express');
-const mysql = require('mysql2');
-const dotenv = require('dotenv');
-
+const logger = require('./utils/logger');
+const config = require('./config/config');
 const routerApi = require('./routes');
-const {ErrorHandler} = require('./middlewares')
+const initializePassport = require('./config/auth');
+const {ErrorHandler} = require('./middlewares');
+const db = require('./db/connection');
 
-dotenv.config();
 
 const app = express();
 
-const PORT = process.env.PORT || 3000;
-
+// Middlewares
 app.use(express.json());
 
-require('./config/auth');
+// Inicializar Passport
+initializePassport(app);
 
-
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
-});
-
-db.connect((err) => {
-  if (err) {
-    console.error('Error al conectar a la base de datos:', err);
-    process.exit(1); // Salir si hay un error
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+// Verificar conexión a la base de datos
+db.getConnection()
+  .then(() => logger.info('Conexión exitosa a la base de datos'))
+  .catch((err) => {
+    logger.error('Error al conectar a la base de datos:', err);
+    process.exit(1);
 });
 
 routerApi(app);
@@ -39,3 +28,8 @@ routerApi(app);
 app.use(ErrorHandler.logErrors);
 app.use(ErrorHandler.boomErrorHandler);
 app.use(ErrorHandler.errorHandler);
+
+// Iniciar servidor
+app.listen(config.port, () => {
+  logger.info(`Servidor corriendo en http://localhost:${config.port}`);
+});

@@ -32,7 +32,7 @@ class UserService {
             const options = {
                 include : [{
                     model : Role,
-                    as : 'rol',
+                    as : 'role',
                     attributes : ['name','description']
                 }]
             }

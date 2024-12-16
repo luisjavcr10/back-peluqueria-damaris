@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
+
 const ServiceService = require('../services/services.service');
 const service = new ServiceService();
 const {ValidatorHandler} = require('../middlewares');
@@ -29,6 +31,7 @@ router.get('/:id',
 });
 
 router.post('/', 
+    passport.authenticate('jwt', {session : false}), 
     ValidatorHandler.handle(ServiceSchema.create(), 'body'),
     async(req,res, next) =>{
     try {
@@ -41,6 +44,7 @@ router.post('/',
 });
 
 router.put('/:id', 
+    passport.authenticate('jwt', {session : false}), 
     ValidatorHandler.handle(ServiceSchema.get(), 'params'),
     ValidatorHandler.handle(ServiceSchema.update(), 'body'),
     async(req,res, next) =>{
@@ -55,6 +59,7 @@ router.put('/:id',
 });
 
 router.delete('/:id', 
+    passport.authenticate('jwt', {session : false}), 
     ValidatorHandler.handle(ServiceSchema.get(), 'params'),
     async(req,res, next) =>{
     try {

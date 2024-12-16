@@ -1,11 +1,11 @@
 const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken')
+const config = require('./../config/config');
+
+const router = express.Router();
 const UserService = require('./../services/users.service');
 const service = new UserService();
-const router = express.Router();
-const dotenv = require('dotenv');
-dotenv.config();
 
 router.post('/login',
     passport.authenticate('local',{session : false}),
@@ -17,8 +17,11 @@ router.post('/login',
                 sub : user.name,
                 role : role
             }
-            const secret = process.env.JWT_SECRET;
-            const token = jwt.sign(payload,secret);
+            const secret = config.jwtSecret;
+            const options = {
+                expiresIn: '6h'
+            };
+            const token = jwt.sign(payload,secret,options);
             res.json({
                 user,
                 token

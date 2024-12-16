@@ -1,4 +1,5 @@
 const {Sequelize} = require('sequelize');
+//const config = require('./config/config');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -13,4 +14,4 @@ sequelize
     .then(() => console.log('Conexión exitosa con la base de datos usando Sequelize'))
     .catch((err) => console.error('Error al conectar con la base de datos:', err));
 
-module.exports = sequelize; 
+module.exports = sequelize;  

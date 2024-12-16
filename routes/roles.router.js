@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
+
 const RoleService = require('../services/roles.service');
 const service = new RoleService();
 const {ValidatorHandler} = require('../middlewares');
@@ -29,6 +31,7 @@ router.get('/:id',
 });
 
 router.post('/', 
+    passport.authenticate('jwt', {session : false}), 
     ValidatorHandler.handle(RoleSchema.create(), 'body'),
     async (req, res, next) => {
     try {
@@ -41,6 +44,7 @@ router.post('/',
 });
 
 router.put('/:id', 
+    passport.authenticate('jwt', {session : false}), 
     ValidatorHandler.handle(RoleSchema.get(), 'params'),
     ValidatorHandler.handle(RoleSchema.update(), 'body'),
     async (req, res, next) => {
@@ -55,6 +59,7 @@ router.put('/:id',
 });
 
 router.delete('/:id',
+    passport.authenticate('jwt', {session : false}), 
     ValidatorHandler.handle(RoleSchema.get(), 'params'),
     async (req, res, next) => {
     try {

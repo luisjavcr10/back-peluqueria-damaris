@@ -1,6 +1,6 @@
 const boom = require('@hapi/boom');
 
-const db = {
+/*const db = {
     apiKey : process.env.API_KEY
 } 
 
@@ -12,5 +12,39 @@ function checkApiKey(req,res,next){
         next(boom.unauthorized());
     }
 }
+    class AuthHandler {
+    checkAdminRole(req, res, next) {
+        const user = req.user;
+        if (user.role === 'Administrador') {
+            next();
+        } else {
+            next(boom.unauthorized());
+        }
+    }
+}
 
-module.exports = {checkApiKey};
+module.exports = new AuthHandler();
+
+
+function checkAdminRole(req,res,next){
+    const user = req.user;
+    if(user.role ==='Administrador'){
+        next();
+    }else{
+        next(boom.unauthorized());
+    }
+}*/
+
+function checkRoles(...roles){
+    return (req, res, next) =>{
+        const user = req.user;
+        if(roles.includes(user.role)){
+            next();
+        }else{
+            next(boom.unauthorized());
+        }
+    }
+}
+
+module.exports = {checkRoles};
+

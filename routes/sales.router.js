@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
+
 const SalesService = require('../services/sales.service');
 const service = new SalesService();
 const {ValidatorHandler} = require('../middlewares');
@@ -35,6 +37,7 @@ router.get('/:id',
 });
 
 router.post('/', 
+    passport.authenticate('jwt', {session : false}), 
     ValidatorHandler.handle(SalesSchema.getSaleSchema(), 'body'),
     async(req,res,next)=>{
     try {
