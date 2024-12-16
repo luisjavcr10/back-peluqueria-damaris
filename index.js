@@ -1,8 +1,6 @@
 const express = require('express');
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
-//const swaggerUI = require('swagger-ui-express');
-//const swaggerSpec = require('./config/swagger');
 
 const routerApi = require('./routes');
 const {ErrorHandler} = require('./middlewares')
@@ -10,12 +8,13 @@ const {ErrorHandler} = require('./middlewares')
 dotenv.config();
 
 const app = express();
-//app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
-// Conexion a la base de datos
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+require('./config/auth');
+
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -35,7 +34,6 @@ app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
 
-//Llamamos las rutas
 routerApi(app);
 
 app.use(ErrorHandler.logErrors);

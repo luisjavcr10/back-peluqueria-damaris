@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 const {ValidatorHandler} = require('../middlewares');
 const {CategorySchema,PaginatorSchema} = require('./../schemas');
 const CategoriesService = require('../services/categories.service');
@@ -29,7 +30,8 @@ router.get('/:id',
     }
 });
 
-router.post('/', 
+router.post('/',
+    passport.authenticate('jwt', {session : false}), 
     ValidatorHandler.handle(CategorySchema.create(),'body'),
     async (req,res,next) => {
     try {  

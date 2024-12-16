@@ -94,6 +94,34 @@ class UserService {
             this._handleError(error,'No se pudo eliminar el servicio');
         }
     };
+
+    async findByEmail(email){
+        try {
+            const user = User.findOne({
+                where: {email}
+            })
+            return user;
+        } catch (error) {
+            this._handleError(error,'No se pudo encontrar el usuario');
+        }
+    }
+
+    async getRole (id){
+        try {
+            const user = await User.findByPk(id);      
+            if (!user) {
+                throw boom.notFound(`User con Id: ${id} no encontrado`);
+            }
+            const role = await Role.findByPk(user.idRole);
+            if (!role) {
+                throw boom.notFound(`Role con Id: ${user.idRole} no encontrado`);
+            }
+            return role.name;
+        } catch (error) {
+            this._handleError(error,'No se pudo obtener el role');
+        }
+        
+    }
 }
 
 module.exports = UserService;

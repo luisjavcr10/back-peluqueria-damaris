@@ -6,10 +6,12 @@ const rolesRouter = require('./roles.router');
 const usersRouter = require('./users.router');
 const employeesRouter = require('./employees.router');
 const saleRouter = require('./sales.router');
+const authRouter= require('./auth.router');
 
 function routerApi(app){
     const router = express.Router();
     app.use('/api/v1', router);
+    router.use('/auth', authRouter);
     router.use('/categories',categoriesRouter);
     router.use('/products',productsRouter);
     router.use('/services', servicesRouter);
