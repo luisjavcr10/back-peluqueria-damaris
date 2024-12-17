@@ -100,13 +100,16 @@ class UserService {
             const user = User.findOne({
                 where: {email}
             })
+            if(!user){
+                throw boom.unauthorized()
+            }
             return user;
         } catch (error) {
             this._handleError(error,'No se pudo encontrar el usuario');
         }
     }
 
-    async getRole (id){
+    async getRole(id){
         try {
             const user = await User.findByPk(id);      
             if (!user) {

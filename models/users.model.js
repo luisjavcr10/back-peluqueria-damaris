@@ -26,6 +26,12 @@ User.init({
         allowNull : false,
         field : 'password_hash'
     },
+    recoveryToken :{
+        type : DataTypes.STRING(255),
+        allowNull : true,
+        field : 'recover_token'
+
+    },
     idRole : {
         type : DataTypes.INTEGER,
         allowNull : false,

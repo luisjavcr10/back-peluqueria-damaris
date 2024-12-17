@@ -9,5 +9,7 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME
   },
-  jwtSecret: process.env.JWT_SECRET
+  jwtSecret: process.env.JWT_SECRET,
+  email : process.env.EMAIL,
+  passwordMail : process.env.PASSWORD_EMAIL
 };
