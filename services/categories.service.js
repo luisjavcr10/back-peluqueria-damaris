@@ -23,8 +23,8 @@ class CategoriesService {
             return newCategory;
         } catch (error) {
             this._handleError(error, 'Error al crear la categoría');
-        }
-    }
+        } 
+    } 
 
     async find(query) {
         try {

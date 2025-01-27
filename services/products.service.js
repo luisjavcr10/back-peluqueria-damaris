@@ -37,7 +37,7 @@ class ProductService {
                 include: [{
                     model: Category,
                     as: 'category',
-                    attributes : ['name', 'description']
+                    attributes : ['idCategory','name', 'description']
                 }]
             }
             const {limit, offset} = query;
@@ -58,7 +58,7 @@ class ProductService {
                 include : [{
                     model: Category,
                     as: 'category',
-                    attributes : ['name', 'description']
+                    attributes : ['idCategory','name', 'description']
                 }]
             });
             if(!product){
@@ -67,6 +67,26 @@ class ProductService {
             return product;
         } catch (error) {
             this._handleError(error, 'Error al buscar el producto');
+        }
+    }
+
+    async findByCategory(idCategory) {
+        try {
+            const options = {
+                include : [{
+                    model: Category,
+                    as: 'category',
+                    attributes : ['name', 'description']
+                }],
+                where:{idCategory}
+            }
+            const products = Product.findAll(options)
+            if(!products){
+                throw boom.notFound('Esta categoria no tiene productos registrados');       
+            }
+            return products;
+        } catch (error) {
+            this._handleError(error,'Error al buscar la categoria');
         }
     }
 

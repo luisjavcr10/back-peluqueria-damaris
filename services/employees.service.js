@@ -29,7 +29,7 @@ class EmployeeService {
                 idUser: newUser.idUser,
                 name: data.name,
                 phone: data.phone,
-                adress: data.adress,
+                address: data.address,
             }, { transaction: t });
             await t.commit();
             return newEmployee;
@@ -66,7 +66,19 @@ class EmployeeService {
 
     async findById(id){
         try {
-            const employee = await Employee.findByPk(id);
+            const options = {
+                include : [{
+                    model : User,
+                    as :'user' ,
+                    attributes : ['name','email','passwordHash','idRole'],
+                    include : [{
+                        model: Role,
+                        as : 'role',
+                        attributes : ['name','description']
+                    }]
+                }]
+            }
+            const employee = await Employee.findByPk(id,options);
             if (!employee) {
                 throw boom.notFound('Empleado no encontrado');
             }
@@ -82,7 +94,7 @@ class EmployeeService {
             if (!employee) {
                 throw boom.notFound('Empleado no encontrado');
             }
-            const updatedEmployee = await employee.update();
+            const updatedEmployee = await employee.update(changes);
             return updatedEmployee;
         } catch (error) {
             this._handleError(error,'Error al actualizar el empleado', );

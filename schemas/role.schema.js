@@ -21,7 +21,7 @@ class RoleSchema {
 
     static get() {
         return Joi.object({
-            idRole : idRole.required()
+            id : idRole.required()
         });
     }
 }

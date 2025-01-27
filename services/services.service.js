@@ -62,7 +62,7 @@ class ServiceService {
             if(!service){
                 throw boom.notFound(`El servicio con id: ${id} no fue encontrado.`);
             }
-            const updatedService = await Service.update(changes);
+            const updatedService = await service.update(changes);
             return updatedService;
         } catch (error) {
             this._handleError(error,'Error al actualizar el servicio');

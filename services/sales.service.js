@@ -1,4 +1,4 @@
-const {Sales, SalesDetails} = require('./../models')
+const {Sales, SalesDetails, User} = require('./../models')
 const UserService = require('./../services/users.service');
 const userService = new UserService();
 const EmployeeService = require('./../services/employees.service');
@@ -25,6 +25,10 @@ class SalesService {
                         model: SalesDetails,
                         as : 'details',
                         attributes : ['type','idProduct','idService','quantity','unitPrice','subtotal']
+                    },{
+                        model: User,
+                        as : 'user',
+                        attributes : ['name']  
                     }]
                 }
                 const {limit, offset} = query;

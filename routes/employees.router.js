@@ -38,7 +38,7 @@ router.get('/:id',
 
 router.post('/',
     passport.authenticate('jwt', {session : false}),
-    checkRoles(['Administrador']), 
+    checkRoles('Administrador'), 
     ValidatorHandler.handle(EmployeeSchema.create(),'body'),
     async (req, res, next) => {
     try {
@@ -52,7 +52,7 @@ router.post('/',
 
 router.put('/:id', 
     passport.authenticate('jwt', {session : false}),
-    checkRoles(['Administrador']),
+    checkRoles('Administrador'),
     ValidatorHandler.handle(EmployeeSchema.get(),'params'),
     ValidatorHandler.handle(EmployeeSchema.update(),'body'),
     async (req, res, next) => {
@@ -68,7 +68,7 @@ router.put('/:id',
 
 router.delete('/:id',
     passport.authenticate('jwt', {session : false}),
-    checkRoles(['Administrador']),
+    checkRoles('Administrador'),
     ValidatorHandler.handle(EmployeeSchema.get(),'params'),
     async (req, res, next) => {
     try {
