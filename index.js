@@ -8,7 +8,7 @@ const db = require('./db/connection');
 const cors = require('cors');
 
 const corsOptions = {
-  origin: 'http://localhost:5173', // Solo permitir solicitudes de este dominio
+  origin: '*', // Solo permitir solicitudes de este dominio
   methods: 'GET,POST,PUT,DELETE',         // Permitir solo estos métodos
   allowedHeaders: 'Content-Type,Authorization', // Encabezados permitidos
 };
@@ -17,7 +17,7 @@ const corsOptions = {
 const app = express();
 
 // Middlewares
-app.use(express.json());
+app.use(express.json({ limit: '300kb' })); // Increase the payload size limit
 
 // Inicializar Passport
 initializePassport(app);

@@ -10,7 +10,7 @@ const {ProductSchema, PaginatorSchema, CategorySchema} = require('../schemas');
 
 router.get('/', 
     passport.authenticate('jwt', {session : false}), 
-    checkRoles('Administrador','Empleado'),
+    checkRoles('ADMINISTRADOR','Empleado'),
     ValidatorHandler.handle(PaginatorSchema.query(),'query'),
     async (req, res, next) => {
     try {
@@ -23,7 +23,7 @@ router.get('/',
 
 router.get('/:id', 
     passport.authenticate('jwt', {session : false}), 
-    checkRoles('Administrador','Empleado'),
+    checkRoles('ADMINISTRADOR','Empleado'),
     ValidatorHandler.handle(ProductSchema.get(),'params'),
     async(req,res, next)=>{
     try {
@@ -37,7 +37,7 @@ router.get('/:id',
 
 router.get('/category/:id',
     passport.authenticate('jwt', {session:false}),
-    checkRoles('Administrador','Empleado'),
+    checkRoles('ADMINISTRADOR','Empleado'),
     ValidatorHandler.handle(CategorySchema.get(),'params'),
     async(req, res, next) =>{
         try {
@@ -52,7 +52,7 @@ router.get('/category/:id',
 
 router.post('/', 
     passport.authenticate('jwt', {session : false}), 
-    checkRoles('Administrador'),
+    checkRoles('ADMINISTRADOR'),
     ValidatorHandler.handle(ProductSchema.create(),'body'),
     async(req,res, next)=>{
     try {
@@ -66,7 +66,7 @@ router.post('/',
 
 router.put('/:id', 
     passport.authenticate('jwt', {session : false}), 
-    checkRoles('Administrador'),
+    checkRoles('ADMINISTRADOR'),
     ValidatorHandler.handle(ProductSchema.get(),'params'),
     ValidatorHandler.handle(ProductSchema.update(),'body'),
     async(req,res, next)=>{
@@ -82,7 +82,7 @@ router.put('/:id',
 
 router.delete('/:id', 
     passport.authenticate('jwt', {session : false}), 
-    checkRoles('Administrador'),
+    checkRoles('ADMINISTRADOR'),
     ValidatorHandler.handle(ProductSchema.get(),'params'),
     async(req,res, next)=>{
     try {

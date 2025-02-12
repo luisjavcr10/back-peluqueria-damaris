@@ -11,6 +11,6 @@ class ValidatorHandler {
             next();
         };
     }
-}
+} 
 
 module.exports = ValidatorHandler;

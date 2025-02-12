@@ -1,7 +1,5 @@
-const {Service} = require('./../models')
-const boom = require('@hapi/boom');
-const {ServiceSchema} = require('./../schemas')
-const {ValidatorHandler} = require('./../middlewares')
+const {Service} = require('./../models');
+const boom = require('@hapi/boom'); 
 
 class ServiceService {
     constructor(){}
@@ -21,7 +19,8 @@ class ServiceService {
                     name : data.name,
                     description: data.description,
                     price : data.price,
-                    state : data.state
+                    state : data.state,
+                    image: data.image
             });
             return newService;
         } catch (error) {

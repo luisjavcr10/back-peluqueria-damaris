@@ -1,4 +1,4 @@
-const {Product, Category} = require('./../models')
+const {Product, Category} = require('./../models');
 const boom = require('@hapi/boom');
 
 class ProductService {
@@ -18,6 +18,7 @@ class ProductService {
             const newCategory = await Product.create({
                 name : data.name,
                 description : data.description,
+                image: data.image,
                 idCategory : data.idCategory ,
                 price : data.price,
                 stock : data.stock,

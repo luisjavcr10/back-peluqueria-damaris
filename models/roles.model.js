@@ -11,10 +11,10 @@ Role.init({
         field : 'id_rol'
     },
     name : {
-        type : DataTypes.STRING(50),
+        type : DataTypes.STRING(100),
         allowNull : false,
         unique: true,
-        field : 'nombre'
+        field : 'nombre_rol'
     },
     description : {
         type : DataTypes.STRING(255),

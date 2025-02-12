@@ -11,5 +11,8 @@ module.exports = {
   },
   jwtSecret: process.env.JWT_SECRET,
   email : process.env.EMAIL,
-  passwordMail : process.env.PASSWORD_EMAIL
+  passwordMail : process.env.PASSWORD_EMAIL,
+  paypalApi : process.env.PAYPAL_API,
+  paypalClientId : process.env.PAYPAL_CLIENT_ID,
+  paypalSecret : process.env.PAYPAL_SECRET,
 };
