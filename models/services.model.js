@@ -5,8 +5,7 @@ class Service extends Model{}
 
 Service.init({
     idService : {
-        type : DataTypes.INTEGER,
-        autoIncrement : true,
+        type : DataTypes.STRING(50),
         primaryKey: true,
         field : 'id_servicio'
     },
@@ -30,6 +29,11 @@ Service.init({
         allowNull: true,
         defaultValue : true,
         field : 'activo'
+    },
+    image: {
+        type: DataTypes.TEXT('long'),
+        allowNull:true,
+        field: 'imagen'
     }
 },{
     sequelize,

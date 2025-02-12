@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const idProduct = Joi.number().integer();
+const idProduct = Joi.string().min(3).max(50);
 const nameProduct = Joi.string().min(3).max(50);
 const descripcion = Joi.string().min(10).max(255);
 const idCategory = Joi.number().integer();
@@ -9,6 +9,7 @@ const stock = Joi.number().integer();
 const arrivalDate = Joi.date().iso();
 const expirationDate = Joi.date().iso();
 const state = Joi.boolean();
+const image = Joi.string().max(1000000);
 
 
 class ProductSchema {
@@ -16,6 +17,7 @@ class ProductSchema {
         return Joi.object({
             name : nameProduct.required(),
             description : descripcion.optional(),
+            image : image.required(),
             idCategory : idCategory.required(),
             price : price.required(),
             stock : stock.optional(),
@@ -29,6 +31,7 @@ class ProductSchema {
         return Joi.object({
             name : nameProduct.optional(),
             description : descripcion.optional(),
+            image : image.optional(),
             idCategory : idCategory.optional(),
             price : price.optional(),
             stock : stock.optional(),

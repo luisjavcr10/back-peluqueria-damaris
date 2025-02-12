@@ -5,9 +5,8 @@ class Product extends Model{}
 
 Product.init({
     idProduct :{
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING(50),
         primaryKey : true,
-        autoIncrement : true,
         field : 'id_producto' 
     },
     name : {
@@ -20,6 +19,11 @@ Product.init({
         type : DataTypes.STRING(255),
         allowNull : true,
         field : 'descripcion'
+    },
+    image: {
+        type: DataTypes.TEXT('long'),
+        allowNull:true,
+        field: 'imagen'
     },
     idCategory :{
         type : DataTypes.INTEGER,

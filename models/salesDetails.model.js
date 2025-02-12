@@ -6,7 +6,6 @@ class SalesDetails extends Model {}
 SalesDetails.init({
     id: {
         type: DataTypes.INTEGER,
-        //autoIncrement: true,
         primaryKey: true
     },
     idSales: {

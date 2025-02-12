@@ -6,6 +6,7 @@ const Role = require('./roles.model');
 const Sales = require('./sales.model');
 const SalesDetails = require('./salesDetails.model'); 
 const Service = require('./../models/services.model');
+const Company = require('./company.model');
 
 // Definir las asociaciones
 // Relación entre Category y Product
@@ -76,6 +77,14 @@ SalesDetails.belongsTo(Product, {
     as: 'product'
 });
 
+//Relacion entre Sales y Company
+
+Sales.belongsTo(Company, {
+    foreignKey: 'ruc',
+    targetKey: 'ruc',
+    as: 'company'
+});
+
 module.exports = {
     Product,
     Category,
@@ -84,5 +93,6 @@ module.exports = {
     Role,
     Sales,
     SalesDetails,
-    Service
+    Service,
+    Company
 };  

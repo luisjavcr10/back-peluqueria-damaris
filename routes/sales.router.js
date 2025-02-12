@@ -10,7 +10,7 @@ const {SalesSchema, PaginatorSchema} = require('../schemas');
  
 router.get('/', 
     passport.authenticate('jwt', {session : false}), 
-    checkRoles('Administrador','Empleado'),
+    checkRoles('ADMINISTRADOR','Empleado'),
     ValidatorHandler.handle(PaginatorSchema.query(),'query'),
     async(req,res, next)=>{
     try {
@@ -26,7 +26,7 @@ router.get('/',
 
 router.get('/:id',
     passport.authenticate('jwt', {session : false}), 
-    checkRoles('Administrador','Empleado'),
+    checkRoles('ADMINISTRADOR','Empleado'),
     ValidatorHandler.handle(SalesSchema.getGetSalesSchema(),'params'),
     async (req, res, next) =>{
     try {
@@ -43,7 +43,7 @@ router.get('/:id',
 
 router.get('/employee/:id', 
     passport.authenticate('jwt', {session : false}), 
-    checkRoles('Administrador','Empleado'),
+    checkRoles('ADMINISTRADOR','Empleado'),
     async(req,res,next)=>{
     try {
         const {id} = req.params;
