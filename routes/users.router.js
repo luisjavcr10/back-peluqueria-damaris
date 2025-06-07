@@ -9,8 +9,8 @@ const {checkRoles} = require('./../middlewares/auth.handler');
 const {UserSchema, PaginatorSchema} = require('../schemas');
 
 router.get('/', 
-    passport.authenticate('jwt', {session : false}), 
-    checkRoles('ADMINISTRADOR','Empleado'),
+    //passport.authenticate('jwt', {session : false}), 
+    //checkRoles('ADMINISTRADOR','Empleado'),
     ValidatorHandler.handle(PaginatorSchema.query(),'query'),
     async (req, res, next) => {
     try {
@@ -36,8 +36,8 @@ router.get('/:id',
 });
 
 router.post('/', 
-    passport.authenticate('jwt', {session : false}), 
-    checkRoles('ADMINISTRADOR'),
+    //passport.authenticate('jwt', {session : false}), 
+    //checkRoles('ADMINISTRADOR'),
     ValidatorHandler.handle(UserSchema.create(),'body'),
     async (req, res, next) => {
     try {

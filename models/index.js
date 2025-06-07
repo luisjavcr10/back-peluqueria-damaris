@@ -96,3 +96,16 @@ module.exports = {
     Service,
     Company
 };  
+
+// Agregar función para sincronizar todos los modelos
+const sequelize = require('../config/db');
+async function syncAllModels() {
+    try {
+        await sequelize.sync({ alter: true }); // Usa alter:true para actualizar tablas sin perder datos
+        console.log('Todos los modelos han sido sincronizados correctamente.');
+    } catch (error) {
+        console.error('Error al sincronizar los modelos:', error);
+    }
+}
+
+module.exports.syncAllModels = syncAllModels;

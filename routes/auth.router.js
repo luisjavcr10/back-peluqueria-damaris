@@ -12,6 +12,7 @@ router.post('/login',
     async (req, res, next) =>{
         try {
             const user = req.user;
+            console.log('roouter')
             const role = await userService.getRole(user.idUser);
             console.log(authService.signToken(user,role));
             res.json(await authService.signToken(user,role));

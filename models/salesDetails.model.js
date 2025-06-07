@@ -6,15 +6,18 @@ class SalesDetails extends Model {}
 SalesDetails.init({
     id: {
         type: DataTypes.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,  // Esta es la clave
+        allowNull: false      // Recomendado para PK
     },
+    //
     idSales: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING(50),
         allowNull: false,
         field: 'id_venta',
         references: {
-            model: 'Sales', 
-            key: 'idSales'
+            model: 'Ventas', // Debe coincidir con el nombre de la tabla en Sales
+            key: 'id_venta' // Debe coincidir con el campo en Sales
         }
     },
     type: {
@@ -25,12 +28,20 @@ SalesDetails.init({
     idProduct: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        field: 'id_producto'
+        field: 'id_producto',
+        references: {
+            model: 'Productos',
+            key: 'id_producto'
+        }
     },
     idService: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        field: 'id_servicio'
+        field: 'id_servicio',
+        references: {
+            model: 'Servicios',
+            key: 'id_servicio'
+        }
     },
     quantity: {
         type: DataTypes.INTEGER,
@@ -54,4 +65,4 @@ SalesDetails.init({
     primaryKey: ['idSales', 'id']
 });
 
-module.exports = SalesDetails; 
+module.exports = SalesDetails;

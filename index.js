@@ -6,6 +6,7 @@ const initializePassport = require('./config/auth');
 const {ErrorHandler} = require('./middlewares');
 const db = require('./db/connection');
 const cors = require('cors');
+const models = require('./models');
 
 const corsOptions = {
   origin: '*', // Solo permitir solicitudes de este dominio
@@ -24,7 +25,10 @@ initializePassport(app);
 
 // Verificar conexión a la base de datos
 db.getConnection()
-  .then(() => logger.info('Conexión exitosa a la base de datos'))
+  .then(async () => {
+    logger.info('Conexión exitosa a la base de datos');
+    await models.syncAllModels();
+  })
   .catch((err) => {
     logger.error('Error al conectar a la base de datos:', err);
     process.exit(1);

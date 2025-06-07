@@ -16,12 +16,12 @@ const saleDataSchema = Joi.object({
 // Esquema para validar un solo elemento en "saleDetailsData"
 const saleDetailsItemSchema = Joi.object({
     type: Joi.string().valid('PRODUCTO', 'SERVICIO').required(),
-    idProduct: Joi.string().min(3).max(50).allow(null).when('type', {
+    idProduct: Joi.number().allow(null).when('type', {
         is: 'PRODUCTO',
         then: Joi.required(),
         otherwise: Joi.forbidden(),
     }),
-    idService: Joi.string().min(3).max(50).allow(null).when('type', {
+    idService: Joi.number().allow(null).when('type', {
         is: 'SERVICIO',
         then: Joi.required(),
         otherwise: Joi.forbidden(),

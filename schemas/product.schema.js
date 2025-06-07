@@ -17,7 +17,7 @@ class ProductSchema {
         return Joi.object({
             name : nameProduct.required(),
             description : descripcion.optional(),
-            image : image.required(),
+            image : image.optional(),
             idCategory : idCategory.required(),
             price : price.required(),
             stock : stock.optional(),

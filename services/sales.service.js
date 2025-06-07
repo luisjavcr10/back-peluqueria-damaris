@@ -77,6 +77,7 @@ class SalesService {
         const t = await sequelize.transaction();
 
         try {
+            console.log(saleData)
             const newSale = await Sales.create(saleData,{transaction:t});
 
             const detailsPromises = saleDetailsData.map(detail =>{

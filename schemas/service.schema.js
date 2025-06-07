@@ -14,7 +14,7 @@ class ServiceSchema {
             description : description.optional(),
             price : price.required(),
             state : state.optional(),
-            image : image.required(),
+            image : image.optional(),
         });
     }
 

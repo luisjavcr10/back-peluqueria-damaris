@@ -111,11 +111,13 @@ class UserService {
 
     async getRole(id){
         try {
-            const user = await User.findByPk(id);      
+            const user = await User.findByPk(id);     
+            console.log(user); 
             if (!user) {
                 throw boom.notFound(`User con Id: ${id} no encontrado`);
             }
             const role = await Role.findByPk(user.idRole);
+            console.log(role);
             if (!role) {
                 throw boom.notFound(`Role con Id: ${user.idRole} no encontrado`);
             }
